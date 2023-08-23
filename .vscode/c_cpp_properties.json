@@ -6,6 +6,8 @@
                 "${workspaceFolder}/**",
                 "../../include",
 				"../../include/ThirdParty",
+                "/Users/AppleBird/Documents/programming/library/cpp/midifile/include"
+
             ],
             "defines": [],
             "macFrameworkPath": [
