@@ -37,6 +37,9 @@
 		2C5C471126B4F08E005E8C85 /* libzlib.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 2C5C471026B4F08E005E8C85 /* libzlib.a */; };
 		2C6906D82298140F00A427D0 /* engine in Resources */ = {isa = PBXBuildFile; fileRef = 2C6906D72298140F00A427D0 /* engine */; };
 		2CD8412C283263B2005013A6 /* libboost_filesystem.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 2CD8412B283263B2005013A6 /* libboost_filesystem.a */; };
+		934A1B4C2A97856400F56AD9 /* ABCParser.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 934A1B492A97856400F56AD9 /* ABCParser.cpp */; };
+		934A1B4D2A97856400F56AD9 /* Music.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 934A1B4A2A97856400F56AD9 /* Music.cpp */; };
+		934A1B4E2A97856400F56AD9 /* NoteOccuranceEffect.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 934A1B4B2A97856400F56AD9 /* NoteOccuranceEffect.cpp */; };
 		9356BBE92A9650EF00F494F6 /* midifile in Resources */ = {isa = PBXBuildFile; fileRef = 9356BBE82A9650EF00F494F6 /* midifile */; };
 		9356BBFD2A96525800F494F6 /* Options.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9356BBF72A96525800F494F6 /* Options.cpp */; };
 		9356BBFE2A96525800F494F6 /* MidiFile.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9356BBF82A96525800F494F6 /* MidiFile.cpp */; };
@@ -79,6 +82,9 @@
 		2C5C471026B4F08E005E8C85 /* libzlib.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libzlib.a; path = ../../lib/macOS/zlib/libzlib.a; sourceTree = "<group>"; };
 		2C6906D72298140F00A427D0 /* engine */ = {isa = PBXFileReference; lastKnownFileType = folder; name = engine; path = App/engine; sourceTree = "<group>"; };
 		2CD8412B283263B2005013A6 /* libboost_filesystem.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libboost_filesystem.a; path = ../../lib/macOS/boost/libboost_filesystem.a; sourceTree = "<group>"; };
+		934A1B492A97856400F56AD9 /* ABCParser.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = ABCParser.cpp; path = src/ABCParser.cpp; sourceTree = "<group>"; };
+		934A1B4A2A97856400F56AD9 /* Music.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = Music.cpp; path = src/Music.cpp; sourceTree = "<group>"; };
+		934A1B4B2A97856400F56AD9 /* NoteOccuranceEffect.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = NoteOccuranceEffect.cpp; path = src/NoteOccuranceEffect.cpp; sourceTree = "<group>"; };
 		9356BBE62A964F7500F494F6 /* libmidifile.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libmidifile.a; path = ../../../../library/cpp/midifile/lib/libmidifile.a; sourceTree = "<group>"; };
 		9356BBE82A9650EF00F494F6 /* midifile */ = {isa = PBXFileReference; lastKnownFileType = folder; path = midifile; sourceTree = "<group>"; };
 		9356BBF72A96525800F494F6 /* Options.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = Options.cpp; path = src/midifile/Options.cpp; sourceTree = "<group>"; };
@@ -130,6 +136,9 @@
 		2C1778791CE0A9D800BB8AD0 = {
 			isa = PBXGroup;
 			children = (
+				934A1B492A97856400F56AD9 /* ABCParser.cpp */,
+				934A1B4A2A97856400F56AD9 /* Music.cpp */,
+				934A1B4B2A97856400F56AD9 /* NoteOccuranceEffect.cpp */,
 				9356BBFA2A96525800F494F6 /* Binasc.cpp */,
 				9356BBFB2A96525800F494F6 /* MidiEvent.cpp */,
 				9356BBFC2A96525800F494F6 /* MidiEventList.cpp */,
@@ -267,6 +276,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				934A1B4C2A97856400F56AD9 /* ABCParser.cpp in Sources */,
+				934A1B4D2A97856400F56AD9 /* Music.cpp in Sources */,
+				934A1B4E2A97856400F56AD9 /* NoteOccuranceEffect.cpp in Sources */,
 				9356BBFD2A96525800F494F6 /* Options.cpp in Sources */,
 				9356BBFE2A96525800F494F6 /* MidiFile.cpp in Sources */,
 				9356BBFF2A96525800F494F6 /* MidiMessage.cpp in Sources */,

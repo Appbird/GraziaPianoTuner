@@ -4,7 +4,7 @@ import { argv, exit } from "process";
 import { Midi, Track } from "@tonejs/midi"
 import { Note } from "@tonejs/midi/dist/Note";
 import assert from "node:assert/strict"
-import path from "node:path"
+
 
 function is_array_of_Uint8Array(x:unknown):x is Uint8Array[]{
     return Array.isArray(x) && x.every(t => t instanceof Uint8Array);
