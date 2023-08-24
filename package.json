@@ -1,0 +1,17 @@
+{
+  "name": "graziepianotuner4",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "tsc && node ./src/index.js",
+    "app": "node ./src/index.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@tonejs/midi": "^2.0.28",
+    "@types/node": "^20.5.0",
+    "abcjs": "^6.2.2"
+  }
+}

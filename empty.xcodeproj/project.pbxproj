@@ -38,6 +38,12 @@
 		2C6906D82298140F00A427D0 /* engine in Resources */ = {isa = PBXBuildFile; fileRef = 2C6906D72298140F00A427D0 /* engine */; };
 		2CD8412C283263B2005013A6 /* libboost_filesystem.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 2CD8412B283263B2005013A6 /* libboost_filesystem.a */; };
 		9356BBE92A9650EF00F494F6 /* midifile in Resources */ = {isa = PBXBuildFile; fileRef = 9356BBE82A9650EF00F494F6 /* midifile */; };
+		9356BBFD2A96525800F494F6 /* Options.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9356BBF72A96525800F494F6 /* Options.cpp */; };
+		9356BBFE2A96525800F494F6 /* MidiFile.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9356BBF82A96525800F494F6 /* MidiFile.cpp */; };
+		9356BBFF2A96525800F494F6 /* MidiMessage.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9356BBF92A96525800F494F6 /* MidiMessage.cpp */; };
+		9356BC002A96525800F494F6 /* Binasc.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9356BBFA2A96525800F494F6 /* Binasc.cpp */; };
+		9356BC012A96525800F494F6 /* MidiEvent.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9356BBFB2A96525800F494F6 /* MidiEvent.cpp */; };
+		9356BC022A96525800F494F6 /* MidiEventList.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9356BBFC2A96525800F494F6 /* MidiEventList.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -75,6 +81,12 @@
 		2CD8412B283263B2005013A6 /* libboost_filesystem.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libboost_filesystem.a; path = ../../lib/macOS/boost/libboost_filesystem.a; sourceTree = "<group>"; };
 		9356BBE62A964F7500F494F6 /* libmidifile.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libmidifile.a; path = ../../../../library/cpp/midifile/lib/libmidifile.a; sourceTree = "<group>"; };
 		9356BBE82A9650EF00F494F6 /* midifile */ = {isa = PBXFileReference; lastKnownFileType = folder; path = midifile; sourceTree = "<group>"; };
+		9356BBF72A96525800F494F6 /* Options.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = Options.cpp; path = src/midifile/Options.cpp; sourceTree = "<group>"; };
+		9356BBF82A96525800F494F6 /* MidiFile.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = MidiFile.cpp; path = src/midifile/MidiFile.cpp; sourceTree = "<group>"; };
+		9356BBF92A96525800F494F6 /* MidiMessage.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = MidiMessage.cpp; path = src/midifile/MidiMessage.cpp; sourceTree = "<group>"; };
+		9356BBFA2A96525800F494F6 /* Binasc.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = Binasc.cpp; path = src/midifile/Binasc.cpp; sourceTree = "<group>"; };
+		9356BBFB2A96525800F494F6 /* MidiEvent.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = MidiEvent.cpp; path = src/midifile/MidiEvent.cpp; sourceTree = "<group>"; };
+		9356BBFC2A96525800F494F6 /* MidiEventList.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = MidiEventList.cpp; path = src/midifile/MidiEventList.cpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -118,6 +130,12 @@
 		2C1778791CE0A9D800BB8AD0 = {
 			isa = PBXGroup;
 			children = (
+				9356BBFA2A96525800F494F6 /* Binasc.cpp */,
+				9356BBFB2A96525800F494F6 /* MidiEvent.cpp */,
+				9356BBFC2A96525800F494F6 /* MidiEventList.cpp */,
+				9356BBF82A96525800F494F6 /* MidiFile.cpp */,
+				9356BBF92A96525800F494F6 /* MidiMessage.cpp */,
+				9356BBF72A96525800F494F6 /* Options.cpp */,
 				2C6906D72298140F00A427D0 /* engine */,
 				2C1778921CE0A9EA00BB8AD0 /* Info.plist */,
 				2C1778A21CE0B65500BB8AD0 /* icon.icns */,
@@ -249,6 +267,12 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9356BBFD2A96525800F494F6 /* Options.cpp in Sources */,
+				9356BBFE2A96525800F494F6 /* MidiFile.cpp in Sources */,
+				9356BBFF2A96525800F494F6 /* MidiMessage.cpp in Sources */,
+				9356BC002A96525800F494F6 /* Binasc.cpp in Sources */,
+				9356BC012A96525800F494F6 /* MidiEvent.cpp in Sources */,
+				9356BC022A96525800F494F6 /* MidiEventList.cpp in Sources */,
 				2C17789A1CE0AA7C00BB8AD0 /* Main.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -359,7 +383,7 @@
 				COMBINE_HIDPI_IMAGES = YES;
 				CONFIGURATION_BUILD_DIR = "$(SRCROOT)/App/";
 				COPY_PHASE_STRIP = NO;
-				DEAD_CODE_STRIPPING = YES;
+				DEAD_CODE_STRIPPING = NO;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
@@ -403,7 +427,6 @@
 					../../lib/macOS/opencv,
 					../../lib/macOS/opus,
 					../../lib/macOS/zlib,
-					/Users/AppleBird/Documents/programming/library/cpp/midifile/lib,
 				);
 				MACOSX_DEPLOYMENT_TARGET = 10.15;
 				MTL_ENABLE_DEBUG_INFO = YES;
@@ -446,7 +469,7 @@
 				COMBINE_HIDPI_IMAGES = YES;
 				CONFIGURATION_BUILD_DIR = "$(SRCROOT)/App/";
 				COPY_PHASE_STRIP = NO;
-				DEAD_CODE_STRIPPING = YES;
+				DEAD_CODE_STRIPPING = NO;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
@@ -484,7 +507,6 @@
 					../../lib/macOS/opencv,
 					../../lib/macOS/opus,
 					../../lib/macOS/zlib,
-					/Users/AppleBird/Documents/programming/library/cpp/midifile/lib,
 				);
 				MACOSX_DEPLOYMENT_TARGET = 10.15;
 				MTL_ENABLE_DEBUG_INFO = NO;

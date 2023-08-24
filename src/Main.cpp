@@ -1,16 +1,34 @@
+# include <algorithm>
 # include <Siv3D.hpp> // OpenSiv3D v0.6.11
 # include <cassert>
 # include <regex>
 # include <stdlib.h>
 # include <MidiFile.h>
+#define DEBUG_PART(x) x
+#define INFO(x) DEBUG_PART(std::cerr << x << std::endl)
+#define snap(var) DEBUG_PART(std::cerr << "[snap] " << #var << " = " << (var) << std::endl)
+#define snap_msg(msg, var) DEBUG_PART(std::cerr << "[snap:" << (msg) << "] " << #var << " = " << (var) << std::endl)
 
+constexpr HSV main_color{210, 0.4, 0.2};
+
+/// ------------------------------
+///  DEBUG
+/// ------------------------------
+
+std::ostream& operator<<(std::ostream& os, Rect r){
+    return os << "(" << r.x << r.y << ") ~ (" << r.br().x << ", " << r.br().y << ")";
+}
+
+/// ------------------------------
+///  Implementation
+/// ------------------------------
 
 struct Note{
     private:
         void validate() const{
-            assert(note_number > 0);
-            assert(start_beats > 0);
-            assert(duration_beats > 0);
+            assert(note_number >= 0);
+            assert(start_beats >= 0);
+            assert(duration_beats >= 0);
         }
     public:
         int note_number;
@@ -24,10 +42,33 @@ struct Note{
             validate();
         }
 };
+struct TempoEvent{
+    private:
+        void validate() const{
+            assert(beats_per_seconds >= 0);
+            assert(start_beats >= 0);
+        }
+    public:
+        double start_beats;
+        double beats_per_seconds;
+        TempoEvent(double arg_beats_per_seconds, int arg_start_ticks, double quater_note_per_ticks):
+            start_beats(arg_start_ticks * quater_note_per_ticks),
+            beats_per_seconds(arg_beats_per_seconds)
+        {
+            validate();
+        }
+        TempoEvent(double arg_beats_per_seconds, int arg_start_beat):
+            start_beats(arg_start_beat),
+            beats_per_seconds(arg_beats_per_seconds)
+        {
+            validate();
+        }
+};
 
 /**
  * @brief ABC記譜法で与えられた楽譜をMIDIに変換する。
- * 出力を安定させるため、abcjsで実装されているエンジン
+ * 出力を安定させるため、abcjsで実装されているMIDI変換エンジンを使用する。
+ * そのため、外部のNode.jsプログラムを一旦生成させている。
  */
 class ABCParser{
         Audio audio;
@@ -54,55 +95,178 @@ class ABCParser{
         }
 };
 
+/**
+ * @brief 
+ * 
+ */
 class Music{
     private:
-        const GMInstrument instrument = GMInstrument::Piano1;
+        //const GMInstrument instrument = GMInstrument::Piano1;
         bool is_ready = false;
         smf::MidiFile midi;
+        double music_length_in_beat;
+        double quarternote_per_ticks;
         Array<Note> notes;
+        Array<TempoEvent> tempo_events;
+
+
     public:
         Music(){}
         Music(smf::MidiFile arg_midi):
             midi(arg_midi)
         {
             assert(midi.getTrackCount() >= 2);
-            const double qst = 1.0 / midi.getTicksPerQuarterNote();
-            smf::MidiEventList melody_track = midi[1];
+            quarternote_per_ticks = 1.0 / midi.getTicksPerQuarterNote();
+            // メロディパートの解析
+            smf::MidiEventList& melody_track = midi[1];
+            midi.linkNotePairs();
             for (int i = 0; i < melody_track.getEventCount(); i++){
                 const auto& event = melody_track[i];
-                if (event.isNoteOn()){ notes << Note{event[0], event.tick, event.getTickDuration(), qst}; }
+                if (event.isNoteOn()){
+                    notes << Note{event[1], event.tick, int(event.getTickDuration()), quarternote_per_ticks};
+                }
             }
+            // テンポの解析
+            smf::MidiEventList& tempo_track = midi[0];
+            for (const int i : step(tempo_track.getEventCount())){
+                const smf::MidiEvent& event = tempo_track[i];
+                if (event.isTempo()){
+                    INFO("find tempo message");
+                    snap(event.getTempoBPM());
+                    tempo_events << TempoEvent{1 / event.getTempoSeconds(), event.tick, quarternote_per_ticks};
+                }
+            }
+            // 曲の長さを求める。
+            // #NOTE これMidiFileの内部に保存されてそうなんだけどな〜〜〜！？
+            smf::MidiFile midi_tmp = midi;
+            midi_tmp.joinTracks();
+            assert(midi_tmp[0].back().isEndOfTrack());
+            music_length_in_beat = midi_tmp[0].back().tick * quarternote_per_ticks;
             is_ready = true;
         }
         const Array<Note>& get_notes() const { return notes; }
-        // #NOTE 値を返さないとOptionaでテンプレートがマッチせず、演算子=が使えない。
-        Music& operator=(Music&& music){
-            midi = std::move(music.midi);
-            notes = std::move(music.notes);
-            return *this;
+        double get_beats_per_seconds(const double current_beat) const {
+            assert(tempo_events.size() > 0);
+            constexpr int ARBITARY = 0;
+            // current_beat以下のはじめの要素を見つける
+            const auto target = std::lower_bound(
+                tempo_events.begin(),
+                tempo_events.end(),
+                TempoEvent{current_beat, ARBITARY},
+                [](const TempoEvent& a, const TempoEvent& b){ return a.start_beats > b.start_beats; }
+            );
+            if (target == tempo_events.end()) { assert(false); }
+            return target->beats_per_seconds;
         }
-        Music& operator=(const Music& music){
-            midi = music.midi;
-            notes = music.notes;
-            return *this;
-        }
-        explicit operator bool(){
+        
+        explicit operator bool() const{
             return is_ready;
+        }
+        bool operator!() const{
+            return not is_ready;
+        }
+        double get_max_beat(){
+            return music_length_in_beat;
         }
         
 };
 
+class ComposedRenderer{
+    private:
+        double n_beats_in_area = 12;
+        double n_halfpitch_in_area = 24; 
+        double lowest_pitch = 70;
+        double ealriest_beat = 0;
+        Rect rendered_area{0, 200, Scene::Size().x, 300};
+        double highest_pitch()      { return lowest_pitch + n_halfpitch_in_area; }
+        double latest_beat()        { return ealriest_beat + n_beats_in_area; }
+        double width_per_beat()     { return rendered_area.w / n_beats_in_area; }
+        double height_per_pitch()   { return rendered_area.h / n_halfpitch_in_area; }
+        
+        void render_pitch(){
+            for (int b = 0; b < n_beats_in_area; b++){
+                Size offset{int(this->width_per_beat() * b), 0};
+                const int thickness = (b % 4 == 0) ? 3 : 2;
+                const double color_value = (b % 4 == 0) ? 0.3 : 0.15;
+                Line{
+                    rendered_area.tl() + offset,
+                    rendered_area.bl() + offset
+                }.draw(thickness, HSV{0, 0, color_value});
+            }
+        }
+        void render_beat(){
+            for (int p = 0; p < n_halfpitch_in_area; p++){
+                Size offset{0, int(this->height_per_pitch() * p)};
+                Line{
+                    rendered_area.tl() + offset,
+                    rendered_area.tr() + offset
+                }.draw(2,HSV{0, 0, 0.15});
+            }
+        }
+        void render_current_position(const double current_position){
+            if (not (InRange(current_position, ealriest_beat, latest_beat()))){ return; }
+            Size offset{int(this->width_per_beat() * (current_position - ealriest_beat) ), 0};
+            Line{
+                rendered_area.tl() + offset,
+                rendered_area.bl() + offset
+            }.draw(5, HSV{200, 0.05, 0.9});
+            
+        }
+        void render_frame(){
+            rendered_area
+            .drawFrame(5, HSV{main_color.h, main_color.s * 0.3, main_color.v * 1.5})
+            .draw(HSV{main_color.h, 0, main_color.v * 0.3});
+        }
+        void render_notes(const Music& music){
+            assert(music);
+            for (const Note& note:music.get_notes()){
+                // ノートの開始拍数
+                // q = quater note(一拍)
+                const int end_beat = note.start_beats + note.duration_beats;
+                
+                if (end_beat < ealriest_beat or latest_beat() < note.start_beats) { continue; }
+                if (not InRange(double(note.note_number), lowest_pitch, highest_pitch())) { continue; }
+                
+                const Size note_offsetVec2{
+                    (int)round((note.start_beats - ealriest_beat) * width_per_beat()),
+                    (int)round((highest_pitch() - note.note_number) * height_per_pitch())
+                };
+                const Size note_size{
+                    (int)round(note.duration_beats * width_per_beat()),
+                    (int)round(1 * height_per_pitch())
+                };
+                Rect{rendered_area.tl() + note_offsetVec2 + Size(2, 2), note_size - Size(2, 2)}
+                .drawFrame(2.0, HSV{main_color.h, main_color.s, 0.5})
+                .draw(HSV{0, 0, 1});
+            }
+        }
+    public:
+        void render(
+            const Music& music,
+            const double current_beat
+        ){
+            render_frame();
+            render_pitch();
+            render_beat();
+            render_current_position(current_beat);
+            if (music) {render_notes(music); }
+        }
+        void update_autoscrool(const double current_beat, const double max_beat){
+            ealriest_beat = Clamp(current_beat - 4, 0, max_beat) * width_per_beat();
+        }
+};
 
 
 class Composed{
     private:
         const std::regex regex{"OUTPUT\\n```\\n([^`]+?)\\n```"};
-        bool is_ready = false;
         String title;
         String key;
         Audio audio;
-        smf::MidiFile midi;
         Music music;
+        ComposedRenderer renderer;
+        double current_beat;
+
         // ./Appを実行している
         String find_last_abc_block(const String& GPT_answer)
         {
@@ -131,7 +295,8 @@ class Composed{
         explicit operator bool() { return (audio and music); }
         void operator=(Composed&& composed)
         {
-            key = std::move(composed.key); title = std::move(composed.title);
+            key = std::move(composed.key);
+            title = std::move(composed.title);
             audio = std::move(composed.audio);
             // #NOTE なぜかOptionalを使うと怒られる。
             music = std::move(composed.music);
@@ -142,37 +307,14 @@ class Composed{
             assert(audio);
             audio.playOneShot();
         }
+        void update(){
+            if (not music) { return; }
+            current_beat += music.get_beats_per_seconds(current_beat) * Scene::DeltaTime();
+            renderer.update_autoscrool(current_beat);
+        }
 
         void render(){
-            const Rect rendered_area{0, 200, Scene::Size().x, 200};
-            const double n_beats_in_area = 16; const double n_halfpitch_in_area = 24; 
-            
-            const int lowest_pitch = 60; const int ealriest_beat = 0;
-            const int highest_pitch = lowest_pitch + n_halfpitch_in_area;
-            const int latest_beat = ealriest_beat + n_beats_in_area;
-            
-            const int width_per_beat    = rendered_area.w / n_beats_in_area;
-            const int height_per_pitch  = rendered_area.h / n_halfpitch_in_area;
-
-            assert(music);
-            for (const Note& note:music.get_notes()){
-                // ノートの開始拍数
-                // q = quater note(一拍)
-                const int end_beat = note.start_beats + note.duration_beats;
-                if (end_beat < ealriest_beat or latest_beat < note.start_beats) { continue; }
-                if (note.note_number < lowest_pitch or highest_pitch < note.note_number){ continue; }
-                
-                const Size note_offsetVec2{
-                    (int)round((note.duration_beats - ealriest_beat) * width_per_beat),
-                    (int)round((highest_pitch - note.note_number) * height_per_pitch)
-                };
-                const Size note_size{
-                    (int)round(note.duration_beats * width_per_beat),
-                    (int)round(1 * height_per_pitch)
-                };
-                Rect{rendered_area.tl() + note_offsetVec2, note_size}.draw(ColorF(1,1,1));
-            }
-
+            renderer.render(music, current_beat);
         }
 };
 
@@ -195,7 +337,7 @@ class MusicalGPT4{
 
 void Main()
 {
-	Scene::SetBackground(ColorF{ 0.6, 0.8, 0.7 });
+	Scene::SetBackground(HSV{210, 0.4, 0.2});
 
 	const Font font{ FontMethod::MSDF, 48, Typeface::Bold };
 
@@ -219,9 +361,7 @@ void Main()
 			answer = musicalGPT4.request(U"create a shiny piano music.");
             answer.play();
         }
-        
-        if (answer){
-            answer.render();
-        }
+        answer.update();
+        answer.render();
 	}
 }
