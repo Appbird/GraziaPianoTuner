@@ -50,15 +50,18 @@ struct TempoEvent{
         }
     public:
         double start_beats;
+        double start_seconds;
         double beats_per_seconds;
-        TempoEvent(double arg_beats_per_seconds, int arg_start_ticks, double quater_note_per_ticks):
+        TempoEvent(double arg_beats_per_seconds, int arg_start_ticks, double arg_start_seconds, double quater_note_per_ticks):
             start_beats(arg_start_ticks * quater_note_per_ticks),
+            start_seconds(arg_start_seconds),
             beats_per_seconds(arg_beats_per_seconds)
         {
             validate();
         }
-        TempoEvent(double arg_beats_per_seconds, int arg_start_beat):
+        TempoEvent(double arg_beats_per_seconds, int arg_start_beat, int arg_start_seconds):
             start_beats(arg_start_beat),
+            start_seconds(arg_start_seconds),
             beats_per_seconds(arg_beats_per_seconds)
         {
             validate();
@@ -96,7 +99,7 @@ class ABCParser{
 };
 
 /**
- * @brief 
+ * @brief Midiを扱うためのクラス。表示にあたって便利な機能を提供する
  * 
  */
 class Music{
@@ -108,8 +111,6 @@ class Music{
         double quarternote_per_ticks;
         Array<Note> notes;
         Array<TempoEvent> tempo_events;
-
-
     public:
         Music(){}
         Music(smf::MidiFile arg_midi):
@@ -123,17 +124,25 @@ class Music{
             for (int i = 0; i < melody_track.getEventCount(); i++){
                 const auto& event = melody_track[i];
                 if (event.isNoteOn()){
+                    snap(event.tick * quarternote_per_ticks);
                     notes << Note{event[1], event.tick, int(event.getTickDuration()), quarternote_per_ticks};
                 }
             }
             // テンポの解析
-            smf::MidiEventList& tempo_track = midi[0];
+            // #NOTE なぜかdoTimeAnalysisをするとTempoメタメッセージが消えるので、TimeAnalysis専用の領域を確保
+            // ta = time analysis
+            smf::MidiFile midi_for_ta = midi;
+            midi_for_ta.doTimeAnalysis();
+            const smf::MidiEventList& tempo_track_ta    = midi_for_ta[0];
+            const smf::MidiEventList& tempo_track       = midi[0];
+            assert(tempo_track.getEventCount() == tempo_track_ta.getEventCount());
             for (const int i : step(tempo_track.getEventCount())){
                 const smf::MidiEvent& event = tempo_track[i];
+                const double time = tempo_track_ta[i].seconds;
                 if (event.isTempo()){
                     INFO("find tempo message");
                     snap(event.getTempoBPM());
-                    tempo_events << TempoEvent{1 / event.getTempoSeconds(), event.tick, quarternote_per_ticks};
+                    tempo_events << TempoEvent{1 / event.getTempoSeconds(), event.tick, time, quarternote_per_ticks};
                 }
             }
             // 曲の長さを求める。
@@ -150,13 +159,26 @@ class Music{
             constexpr int ARBITARY = 0;
             // current_beat以下のはじめの要素を見つける
             const auto target = std::lower_bound(
-                tempo_events.begin(),
-                tempo_events.end(),
-                TempoEvent{current_beat, ARBITARY},
-                [](const TempoEvent& a, const TempoEvent& b){ return a.start_beats > b.start_beats; }
+                tempo_events.rbegin(),
+                tempo_events.rend(),
+                TempoEvent{current_beat, ARBITARY, ARBITARY},
+                [](const TempoEvent& a, const TempoEvent& b){ return a.start_beats < b.start_beats; }
             );
-            if (target == tempo_events.end()) { assert(false); }
+            if (target == tempo_events.rend()) { assert(false); }
             return target->beats_per_seconds;
+        }
+        double beats_to_seconds(const double beats){
+            assert(tempo_events.size() > 0);
+            constexpr int ARBITARY = 0;
+            const auto& last_tempo_track = std::lower_bound(
+                tempo_events.rbegin(),
+                tempo_events.rend(),
+                TempoEvent{beats, ARBITARY, ARBITARY},
+                [](const TempoEvent& a, const TempoEvent& b){ return a.start_beats < b.start_beats; }
+            );
+            if (last_tempo_track == tempo_events.rend()) { assert(false); }
+            const double remainder_beats = beats - last_tempo_track->start_seconds;
+            return remainder_beats / last_tempo_track->beats_per_seconds;
         }
         
         explicit operator bool() const{
@@ -165,17 +187,21 @@ class Music{
         bool operator!() const{
             return not is_ready;
         }
-        double get_max_beat(){
+        double get_music_length_in_beat(){
             return music_length_in_beat;
         }
         
 };
 
+/**
+ * @brief 生成した音楽をピアノロールとしてレンダリングする。
+ * 
+ */
 class ComposedRenderer{
     private:
         double n_beats_in_area = 12;
         double n_halfpitch_in_area = 24; 
-        double lowest_pitch = 70;
+        double lowest_pitch = 65;
         double ealriest_beat = 0;
         Rect rendered_area{0, 200, Scene::Size().x, 300};
         double highest_pitch()      { return lowest_pitch + n_halfpitch_in_area; }
@@ -183,9 +209,10 @@ class ComposedRenderer{
         double width_per_beat()     { return rendered_area.w / n_beats_in_area; }
         double height_per_pitch()   { return rendered_area.h / n_halfpitch_in_area; }
         
-        void render_pitch(){
-            for (int b = 0; b < n_beats_in_area; b++){
-                Size offset{int(this->width_per_beat() * b), 0};
+        void render_beat(){
+            for (int b = int(ceil(ealriest_beat)); b <= int(floor(latest_beat())); b++){
+                const double delta_beat = b - ealriest_beat;
+                Size offset{int(this->width_per_beat() * delta_beat), 0};
                 const int thickness = (b % 4 == 0) ? 3 : 2;
                 const double color_value = (b % 4 == 0) ? 0.3 : 0.15;
                 Line{
@@ -194,9 +221,10 @@ class ComposedRenderer{
                 }.draw(thickness, HSV{0, 0, color_value});
             }
         }
-        void render_beat(){
-            for (int p = 0; p < n_halfpitch_in_area; p++){
-                Size offset{0, int(this->height_per_pitch() * p)};
+        void render_pitch(){
+            for (int p = int(ceil(lowest_pitch)); p <= int(floor(highest_pitch())); p++){
+                const double delta_pitch = highest_pitch() - p;
+                Size offset{0, int(this->height_per_pitch() * delta_pitch)};
                 Line{
                     rendered_area.tl() + offset,
                     rendered_area.tr() + offset
@@ -206,10 +234,15 @@ class ComposedRenderer{
         void render_current_position(const double current_position){
             if (not (InRange(current_position, ealriest_beat, latest_beat()))){ return; }
             Size offset{int(this->width_per_beat() * (current_position - ealriest_beat) ), 0};
-            Line{
+            const Line sequence_line{
                 rendered_area.tl() + offset,
                 rendered_area.bl() + offset
-            }.draw(5, HSV{200, 0.05, 0.9});
+            };
+            sequence_line.draw(5, HSV{200, 0.05, 0.9});
+            const double marker_size = 20;
+            const Point marker_offset = Point{0, 10};
+            Triangle{sequence_line.begin - marker_offset, marker_size, Math::Pi}.draw(HSV{200, 0.05, 0.9});
+            Triangle{sequence_line.end + marker_offset, marker_size, 0}.draw(HSV{200, 0.05, 0.9});
             
         }
         void render_frame(){
@@ -249,10 +282,14 @@ class ComposedRenderer{
             render_pitch();
             render_beat();
             render_current_position(current_beat);
-            if (music) {render_notes(music); }
+            if (music) { render_notes(music); }
         }
         void update_autoscrool(const double current_beat, const double max_beat){
-            ealriest_beat = Clamp(current_beat - 4, 0, max_beat) * width_per_beat();
+            const double offset_beat = 4;
+            const double current_scroll = current_beat - offset_beat;
+            const double min_scroll = 0.0;
+            const double max_scroll = max_beat - n_beats_in_area;
+            ealriest_beat = Clamp(current_scroll, min_scroll, max_scroll);
         }
 };
 
@@ -264,8 +301,9 @@ class Composed{
         String key;
         Audio audio;
         Music music;
+        bool is_playing = false;
         ComposedRenderer renderer;
-        double current_beat;
+        double current_beat = 3;
 
         // ./Appを実行している
         String find_last_abc_block(const String& GPT_answer)
@@ -304,13 +342,24 @@ class Composed{
         
         void play()
         {
-            assert(audio);
-            audio.playOneShot();
+            assert(audio and music);
+            is_playing = true;
+            const double start_sec = music.beats_to_seconds(current_beat);
+            // beats to secondの機構が必要
+            audio.seekTime(start_sec);
+            audio.play();
         }
         void update(){
             if (not music) { return; }
-            current_beat += music.get_beats_per_seconds(current_beat) * Scene::DeltaTime();
-            renderer.update_autoscrool(current_beat);
+            
+            renderer.update_autoscrool(current_beat, music.get_music_length_in_beat());
+            if (is_playing){
+                current_beat += music.get_beats_per_seconds(current_beat) * Scene::DeltaTime();
+                if (current_beat >= music.get_music_length_in_beat()){
+                    current_beat = music.get_music_length_in_beat();
+                    is_playing = false;
+                }
+            }
         }
 
         void render(){
@@ -343,16 +392,17 @@ void Main()
 
 	// 環境変数から API キーを取得する
 	const String API_KEY = U"SECRET_KEY"; // EnvironmentVariable::Get(U"MY_OPENAI_API_KEY");
+    MusicalGPT4 musicalGPT4(API_KEY);
 
 	// テキストボックスの中身
 	TextEditState textEditState;
 
 	// 回答を格納する変数
 	Composed answer;
-    MusicalGPT4 musicalGPT4(API_KEY);
 
 	while (System::Update())
 	{
+        ClearPrint();
 		// テキストボックスを表示する
 		SimpleGUI::TextBox(textEditState, Vec2{ 40, 40 }, 600);
 
