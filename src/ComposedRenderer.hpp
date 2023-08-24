@@ -1,9 +1,18 @@
 # pragma once
 # include <Siv3D.hpp>
-
+# include <algorithm>
 # include "Music.hpp"
 # include "NoteOccuranceEffect.hpp"
 # include "util.hpp"
+
+static int mod(int a, int p){
+    const int m = a % p;
+    const int result = m + ((m >= 0) ? 0 : p);
+    assert(InRange(result, 0, p - 1));
+    return result;
+}
+
+
 /**
  * @brief 生成した音楽をピアノロールとしてレンダリングする。
  */
@@ -14,85 +23,84 @@ class ComposedRenderer{
         double n_halfpitch_in_area = 24; 
         double lowest_pitch = 65;
         double earliest_beat = 0;
-        Rect rendered_area{0, 200, Scene::Size().x, 300};   /** 描画領域 */
+        double piano_role_boundary = 50;
         double highest_pitch()      const { return lowest_pitch + n_halfpitch_in_area; }
         double latest_beat()        const { return earliest_beat + n_beats_in_area; }
         double width_per_beat()     const { return rendered_area.w / n_beats_in_area; }
         double height_per_pitch()   const { return rendered_area.h / n_halfpitch_in_area; }
         
-        void render_beat(){
-            for (int b = int(ceil(earliest_beat)); b <= int(floor(latest_beat())); b++){
-                const double delta_beat = b - earliest_beat;
-                Size offset{int(this->width_per_beat() * delta_beat), 0};
-                const int thickness = (b % 4 == 0) ? 3 : 2;
-                const double color_value = (b % 4 == 0) ? 0.3 : 0.15;
-                Line{
-                    rendered_area.tl() + offset,
-                    rendered_area.bl() + offset
-                }.draw(thickness, HSV{0, 0, color_value});
-            }
-        }
-        void render_pitch(){
-            for (int p = int(ceil(lowest_pitch)); p <= int(floor(highest_pitch())); p++){
-                const double delta_pitch = highest_pitch() - p;
-                Size offset{0, int(this->height_per_pitch() * delta_pitch)};
-                Line{
-                    rendered_area.tl() + offset,
-                    rendered_area.tr() + offset
-                }.draw(2,HSV{0, 0, 0.15});
-            }
-        }
-        void render_current_position(const double current_position){
-            if (not (InRange(current_position, earliest_beat, latest_beat()))){ return; }
-            Size offset{int(this->width_per_beat() * (current_position - earliest_beat) ), 0};
-            const Line sequence_line{
-                rendered_area.tl() + offset,
-                rendered_area.bl() + offset
-            };
-            sequence_line.draw(5, HSV{200, 0.05, 0.9});
-            const double marker_size = 20;
-            const Point marker_offset = Point{0, 10};
-            Triangle{sequence_line.begin - marker_offset, marker_size, Math::Pi}.draw(HSV{200, 0.05, 0.9});
-            Triangle{sequence_line.end + marker_offset, marker_size, 0}.draw(HSV{200, 0.05, 0.9});
-            
-        }
+        void render_beat();
+        void render_pitch();
+        void render_current_position(const double current_position);
         void render_frame(){
             rendered_area
             .drawFrame(5, HSV{main_color.h, main_color.s * 0.3, main_color.v * 1.5})
             .draw(HSV{main_color.h, 0, main_color.v * 0.3});
         }
-        void render_notes(const Music& music, const double current_beat, const NoteIterator& occur_end){
-            assert(music);
-            const auto start    = music.get_notes().begin();
-            const auto end      = music.get_notes().end();
-            for (NoteIterator noteiter = start; noteiter < end; noteiter++){
-                // ノートの開始拍数
-                // q = quater note(一拍)
-                const int end_beat = noteiter->start_beats + noteiter->duration_beats;
-                if (end_beat < earliest_beat or latest_beat() < noteiter->start_beats)           { continue; }
-                if (not InRange(double(noteiter->note_number), lowest_pitch, highest_pitch()))   { continue; }
-                
-                // すでに引かれているか否かで描画色を帰る
-                const bool is_playing = noteiter->duration_beats >= current_beat - occur_end->start_beats;
-                const bool confronting = noteiter >= occur_end;
-                const HSV note_color = 
-                    (confronting)   ? HSV{0, 0, 1} :
-                    (is_playing)    ? HSV{220, 0.3,  0.7} :
-                                      HSV{200, 0.2,  0.5};
-
-                note_rect(*noteiter)
-                .drawFrame(2.0, HSV{main_color.h, main_color.s, 0.5})
-                .draw(note_color);
-            }
-        }
+        void render_notes(
+            const Music& music,
+            const double current_beat,
+            const NoteIterator& occur_end
+        ) const;
         void occur_particle(
             const NoteIterator& occur_begin,
             const NoteIterator& occur_end
         ){
             for (auto iter = occur_begin; iter < occur_end; iter++){
                 // #NOTE 画面外にあるエフェクトは描画しなくても良い[最適化]
-                effect.add<NoteOccuranceEffect>(*this, *iter, 0.8, 10);
+                effect.add<NoteOccuranceEffect>(*this, *iter, 0.8, 20);
             }
+        }
+
+        Rect piano_area {
+            0, 200,
+            int(piano_role_boundary), 300
+        };   /** 描画領域 */
+        Rect rendered_area{
+            int(piano_role_boundary), 200,
+            Scene::Size().x - int(piano_role_boundary) - 5, 300
+        };   /** 描画領域 */
+        
+        // thanks to https://twitter.com/masaka_k/status/1536397542879297536?s=20
+        void render_piano() const{
+            constexpr int oct = 12; // オクターブ
+            int key = mod((int)floor(lowest_pitch - 60), oct);
+            int intital_pitch = floor(lowest_pitch);
+
+            for (
+                int p = intital_pitch; p < highest_pitch();
+                p++, key = (key + 1 == oct) ? 0 : key + 1
+            ){
+                const std::array<int, 8> white_keys{0, 2, 4, 5, 7, 9, 11, 12};
+                Point offset{0, -int((p - intital_pitch) * height_per_pitch())};
+                const Color frame_color = ColorF{0.8, 0.8, 0.8};
+                // 白鍵の描画
+                // #NOTE バグ:: (tl, size)を(tl, br)と勘違いしていたせいで時間を溶かす
+                Rect {
+                    piano_area.bl() - Point{0, (int)height_per_pitch()} + offset,
+                    Point{piano_area.w, (int)height_per_pitch()}
+                }
+                .drawFrame(2, frame_color)
+                .draw(ColorF{0.9, 0.9, 0.9});
+                // #NOTE ここは最適化できる [最適化]
+                const auto white_keys_iter = std::lower_bound(white_keys.begin(), white_keys.end(), key);
+                
+                if (*white_keys_iter != key) {
+                    //黒鍵だった場合
+                    Rect {
+                        piano_area.bl() - Point{0, (int)height_per_pitch()}     + offset,
+                        Point{int(piano_area.w * 0.6), (int)height_per_pitch()}
+                    }
+                    .drawFrame(2, frame_color)
+                    .draw(ColorF{0.05, 0.05, 0.05});
+                }
+            }
+        }
+        /**
+         * @brief 与えられた点pがノーツ描画領域内に収まるように修正する。
+         */
+        Point clamp_X(const Point& p) const{
+            return Point{Clamp(p.x, rendered_area.leftX() + 1, rendered_area.rightX()), p.y};
         }
     public:
         Rect note_rect(const Note& note) const{
@@ -104,7 +112,14 @@ class ComposedRenderer{
                 (int)round(note.duration_beats * width_per_beat()),
                 (int)round(1 * height_per_pitch())
             };
-            return Rect{rendered_area.tl() + note_offsetVec2 + Size(2, 2), note_size - Size(2, 2)};
+            const Point actual_tl = rendered_area.tl() + note_offsetVec2 + Size(2, 2);
+            const Point tl = clamp_X(actual_tl);
+            const Point scraped_tl = tl - actual_tl;
+            Rect note_rect{
+                tl,
+                clamp_X(tl + note_size) - tl - scraped_tl
+            };
+            return note_rect;
         }
         /**
          * @brief ピアノロールを描画する
@@ -127,10 +142,14 @@ class ComposedRenderer{
             render_frame();
             render_pitch();
             render_beat();
+            render_piano();
+            if (music) { render_notes(music, current_beat, occur_end); }
             render_current_position(current_beat);
             occur_particle(occur_begin, occur_end);
-            effect.update();
-            if (music) { render_notes(music, current_beat, occur_end); }
+            {
+                const ScopedRenderStates2D blender{ BlendState::Additive };
+                effect.update();
+            }
         }
         void update_autoscrool(const double current_beat, const double max_beat){
             const double offset_beat = 4;

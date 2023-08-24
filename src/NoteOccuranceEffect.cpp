@@ -21,6 +21,6 @@ bool NoteOccuranceEffect::update(double t){
     Rect{
         target.tl() - current_inner_size * Point{1,1},
         target.size + 2 * current_inner_size * Point{1,1}
-    }.drawFrame(current_outer_size - current_inner_size, HSV{0, 0, 1});
+    }.drawFrame(current_outer_size - current_inner_size, HSV{180, 0.5, 0.6});
     return t < lifetime;
 };

@@ -40,6 +40,8 @@
 		934A1B4C2A97856400F56AD9 /* ABCParser.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 934A1B492A97856400F56AD9 /* ABCParser.cpp */; };
 		934A1B4D2A97856400F56AD9 /* Music.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 934A1B4A2A97856400F56AD9 /* Music.cpp */; };
 		934A1B4E2A97856400F56AD9 /* NoteOccuranceEffect.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 934A1B4B2A97856400F56AD9 /* NoteOccuranceEffect.cpp */; };
+		934A1B512A978CBF00F56AD9 /* ComposedRenderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 934A1B4F2A978CBF00F56AD9 /* ComposedRenderer.cpp */; };
+		934A1B522A978CBF00F56AD9 /* Composed.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 934A1B502A978CBF00F56AD9 /* Composed.cpp */; };
 		9356BBE92A9650EF00F494F6 /* midifile in Resources */ = {isa = PBXBuildFile; fileRef = 9356BBE82A9650EF00F494F6 /* midifile */; };
 		9356BBFD2A96525800F494F6 /* Options.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9356BBF72A96525800F494F6 /* Options.cpp */; };
 		9356BBFE2A96525800F494F6 /* MidiFile.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9356BBF82A96525800F494F6 /* MidiFile.cpp */; };
@@ -85,6 +87,8 @@
 		934A1B492A97856400F56AD9 /* ABCParser.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = ABCParser.cpp; path = src/ABCParser.cpp; sourceTree = "<group>"; };
 		934A1B4A2A97856400F56AD9 /* Music.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = Music.cpp; path = src/Music.cpp; sourceTree = "<group>"; };
 		934A1B4B2A97856400F56AD9 /* NoteOccuranceEffect.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = NoteOccuranceEffect.cpp; path = src/NoteOccuranceEffect.cpp; sourceTree = "<group>"; };
+		934A1B4F2A978CBF00F56AD9 /* ComposedRenderer.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = ComposedRenderer.cpp; path = src/ComposedRenderer.cpp; sourceTree = "<group>"; };
+		934A1B502A978CBF00F56AD9 /* Composed.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = Composed.cpp; path = src/Composed.cpp; sourceTree = "<group>"; };
 		9356BBE62A964F7500F494F6 /* libmidifile.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libmidifile.a; path = ../../../../library/cpp/midifile/lib/libmidifile.a; sourceTree = "<group>"; };
 		9356BBE82A9650EF00F494F6 /* midifile */ = {isa = PBXFileReference; lastKnownFileType = folder; path = midifile; sourceTree = "<group>"; };
 		9356BBF72A96525800F494F6 /* Options.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = Options.cpp; path = src/midifile/Options.cpp; sourceTree = "<group>"; };
@@ -136,6 +140,8 @@
 		2C1778791CE0A9D800BB8AD0 = {
 			isa = PBXGroup;
 			children = (
+				934A1B502A978CBF00F56AD9 /* Composed.cpp */,
+				934A1B4F2A978CBF00F56AD9 /* ComposedRenderer.cpp */,
 				934A1B492A97856400F56AD9 /* ABCParser.cpp */,
 				934A1B4A2A97856400F56AD9 /* Music.cpp */,
 				934A1B4B2A97856400F56AD9 /* NoteOccuranceEffect.cpp */,
@@ -276,6 +282,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				934A1B512A978CBF00F56AD9 /* ComposedRenderer.cpp in Sources */,
+				934A1B522A978CBF00F56AD9 /* Composed.cpp in Sources */,
 				934A1B4C2A97856400F56AD9 /* ABCParser.cpp in Sources */,
 				934A1B4D2A97856400F56AD9 /* Music.cpp in Sources */,
 				934A1B4E2A97856400F56AD9 /* NoteOccuranceEffect.cpp in Sources */,
