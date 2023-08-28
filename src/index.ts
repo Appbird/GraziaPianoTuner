@@ -12,6 +12,7 @@ function is_array_of_Uint8Array(x:unknown):x is Uint8Array[]{
 
 function modify_midi(midi_raw:Uint8Array):Uint8Array{
     const midi = new Midi(midi_raw)
+    if (midi.tracks.length <= 2) { return midi_raw; }
     assert.ok(midi.tracks.length > 2, `midi.tracks.length ${midi.tracks.length} <= 2`);
     const melody_track = midi.tracks[1];
     const chord_track = midi.tracks[midi.tracks.length - 1];

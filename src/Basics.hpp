@@ -57,3 +57,18 @@ struct TempoEvent{
             validate();
         }
 };
+
+struct ChordEvent{
+    private:
+        void validate() const{
+            assert(chord.length() >= 0);
+            assert(start_beats >= 0);
+        }
+    public:
+        String chord;           /** このテンポイベントが何拍目に生起するか */
+        double start_beats;     /** 曲の開始から何拍でこのイベントが生起するか。拍数から秒数の変換に使用 */
+        ChordEvent(const String& arg_chord, double arg_start_beats):
+            chord(arg_chord),
+            start_beats(arg_start_beats)
+        {}
+};

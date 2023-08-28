@@ -1,0 +1,19 @@
+To create a shiny piano music, I will incorporate bright and lively melodies and use chord progressions with major chords to create a joyful and uplifting atmosphere. I will also incorporate some arpeggios and higher register notes to add a shimmering effect. The piece will have a moderate tempo to maintain the sense of shine throughout.
+
+Please find the final output below:
+
+OUTPUT
+```abc
+X:1
+T:Bright Sun
+M:4/4
+L:1/4
+K:G
+Q:1/4=140
+|"Gmaj"G B/2B/2 D G/2G/2| "Dmaj"A ^F/2^F/2 D A/2A/2 | "Am7" A C/2C/2 E G/2G/2 |"D7" ^F/2A/2 C ^F/2A/2 |
+|"Gmaj"G B/2B/2 D G/2G/2 | "Cmaj"E G/2G/2 C E/2E/2 | "Bm7"D ^F/2^F/2 B D/2D/2 |"Am7"C E/2E/2 A C/2C/2 |
+|"Bb"D F/2F/2 _B D/2D/2 | "Em7"E G/2G/2 B E/2E/2 | "Am7"D ^F/2^F/2 A D/2D/2 | "D7"A C/2C/2 ^F/2A/2 |
+|"Gmaj"G B/2B/2 D G/2G/2 | "Cmaj"E G/2G/2 C E/2E/2 | "Dmaj"^F/2 A/2 D ^F/2 A/2 |"Gmaj"G2 B2 |
+```
+
+In this composition, I have used bright and uplifting melodies accompanied by chord progressions with major chords to create a sense of shine. The arpeggios and higher register notes in some sections add a shimmering effect to the music. The repetition of certain patterns and phrases creates continuity and enhances the shine throughout the piece.

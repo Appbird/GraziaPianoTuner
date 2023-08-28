@@ -37,6 +37,8 @@
 		2C5C471126B4F08E005E8C85 /* libzlib.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 2C5C471026B4F08E005E8C85 /* libzlib.a */; };
 		2C6906D82298140F00A427D0 /* engine in Resources */ = {isa = PBXBuildFile; fileRef = 2C6906D72298140F00A427D0 /* engine */; };
 		2CD8412C283263B2005013A6 /* libboost_filesystem.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 2CD8412B283263B2005013A6 /* libboost_filesystem.a */; };
+		9333ADE72A9C5C7300A5FB65 /* Layout.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9333ADE62A9C5C7300A5FB65 /* Layout.cpp */; };
+		9333ADE92A9C7DD400A5FB65 /* Main_test.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9333ADE82A9C7DD400A5FB65 /* Main_test.cpp */; };
 		934A1B4C2A97856400F56AD9 /* ABCParser.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 934A1B492A97856400F56AD9 /* ABCParser.cpp */; };
 		934A1B4D2A97856400F56AD9 /* Music.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 934A1B4A2A97856400F56AD9 /* Music.cpp */; };
 		934A1B4E2A97856400F56AD9 /* NoteOccuranceEffect.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 934A1B4B2A97856400F56AD9 /* NoteOccuranceEffect.cpp */; };
@@ -84,6 +86,8 @@
 		2C5C471026B4F08E005E8C85 /* libzlib.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libzlib.a; path = ../../lib/macOS/zlib/libzlib.a; sourceTree = "<group>"; };
 		2C6906D72298140F00A427D0 /* engine */ = {isa = PBXFileReference; lastKnownFileType = folder; name = engine; path = App/engine; sourceTree = "<group>"; };
 		2CD8412B283263B2005013A6 /* libboost_filesystem.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libboost_filesystem.a; path = ../../lib/macOS/boost/libboost_filesystem.a; sourceTree = "<group>"; };
+		9333ADE62A9C5C7300A5FB65 /* Layout.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = Layout.cpp; path = src/Layout.cpp; sourceTree = "<group>"; };
+		9333ADE82A9C7DD400A5FB65 /* Main_test.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = Main_test.cpp; path = src/Main_test.cpp; sourceTree = "<group>"; };
 		934A1B492A97856400F56AD9 /* ABCParser.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = ABCParser.cpp; path = src/ABCParser.cpp; sourceTree = "<group>"; };
 		934A1B4A2A97856400F56AD9 /* Music.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = Music.cpp; path = src/Music.cpp; sourceTree = "<group>"; };
 		934A1B4B2A97856400F56AD9 /* NoteOccuranceEffect.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = NoteOccuranceEffect.cpp; path = src/NoteOccuranceEffect.cpp; sourceTree = "<group>"; };
@@ -140,6 +144,8 @@
 		2C1778791CE0A9D800BB8AD0 = {
 			isa = PBXGroup;
 			children = (
+				9333ADE82A9C7DD400A5FB65 /* Main_test.cpp */,
+				9333ADE62A9C5C7300A5FB65 /* Layout.cpp */,
 				934A1B502A978CBF00F56AD9 /* Composed.cpp */,
 				934A1B4F2A978CBF00F56AD9 /* ComposedRenderer.cpp */,
 				934A1B492A97856400F56AD9 /* ABCParser.cpp */,
@@ -282,6 +288,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9333ADE92A9C7DD400A5FB65 /* Main_test.cpp in Sources */,
+				9333ADE72A9C5C7300A5FB65 /* Layout.cpp in Sources */,
 				934A1B512A978CBF00F56AD9 /* ComposedRenderer.cpp in Sources */,
 				934A1B522A978CBF00F56AD9 /* Composed.cpp in Sources */,
 				934A1B4C2A97856400F56AD9 /* ABCParser.cpp in Sources */,

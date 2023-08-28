@@ -2,7 +2,7 @@
 #include "ComposedRenderer.hpp"
 
 NoteOccuranceEffect::NoteOccuranceEffect(
-    const ComposedRenderer& arg_renderer,
+    const ComposedViewer& arg_renderer,
     const Note& arg_note,
     const double arg_lifetime,
     const double arg_max_size

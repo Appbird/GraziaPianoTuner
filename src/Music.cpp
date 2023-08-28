@@ -2,13 +2,19 @@
 
 void Music::prepare_melody_notes(){
     // メロディパートの解析
-    smf::MidiEventList& melody_track = midi[1];
+    smf::MidiEventList& melody_track = midi[1];    
+    assert(melody_track.getEventCount() > 0);
+    // #最初のNOTE_ONメッセージをとってくるのがめんどくさいので、適当に初期化
+    m_min_pitch = 999;
+    m_max_pitch = 0;
     midi.linkNotePairs();
     for (int i = 0; i < melody_track.getEventCount(); i++){
         const auto& event = melody_track[i];
         if (event.isNoteOn()){
-            snap(event.tick * quarternote_per_ticks);
-            notes << Note{event[1], event.tick, int(event.getTickDuration()), quarternote_per_ticks};
+            const int pitch = event[1];
+            if (m_min_pitch > pitch) { m_min_pitch = pitch; }
+            if (m_max_pitch < pitch) { m_max_pitch = pitch; }
+            notes << Note{pitch, event.tick, int(event.getTickDuration()), quarternote_per_ticks};
         }
     }
 }
@@ -58,7 +64,7 @@ double Music::get_beats_per_seconds(const double current_beat) const {
 
 Array<Note>::const_iterator Music::get_next_note_index(const double current_beat) const {
     assert(is_ready);
-    assert(tempo_events.size() > 0);
+    assert(notes.size() > 0);
     // current_beat以下のはじめの要素を見つける
     const auto target = std::partition_point(
         notes.begin(),
@@ -66,6 +72,18 @@ Array<Note>::const_iterator Music::get_next_note_index(const double current_beat
         [&](const Note& a){ return a.start_beats <= current_beat; }
     );
     assert(std::distance(notes.begin(), target) > 0);
+    return target;
+}
+Array<ChordEvent>::const_iterator Music::get_next_chord_index(const double current_beat) const {
+    assert(is_ready);
+    assert(chord_events.size() > 0);
+    // current_beat以下のはじめの要素を見つける
+    const auto target = std::partition_point(
+        chord_events.begin(),
+        chord_events.end(),
+        [&](const ChordEvent& a){ return a.start_beats <= current_beat; }
+    );
+    assert(std::distance(chord_events.begin(), target) > 0);
     return target;
 }
 

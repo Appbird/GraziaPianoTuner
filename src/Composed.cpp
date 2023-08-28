@@ -2,7 +2,7 @@
 
 String Composed::find_last_abc_block(const String& GPT_answer)
 {
-    const std::regex regex{"OUTPUT\\n```\\n([^`]+?)\\n```"};
+    const std::regex regex{"OUTPUT\\n```abc\\n([^`]+?)\\n```"};
     std::string str_utf8 = GPT_answer.toUTF8();
     std::smatch matches;
     std::regex_search(str_utf8.cbegin(), str_utf8.cend(), matches, regex);
@@ -14,6 +14,7 @@ String Composed::find_last_abc_block(const String& GPT_answer)
 
 void Composed::play()
 {
+    if (not music) { return; }
     assert(audio and music);
     is_playing = true;
     latest_notes    = music.get_next_note_index(current_beat) - 1;
@@ -21,16 +22,14 @@ void Composed::play()
 
     const double start_sec = music.beats_to_seconds(current_beat);
     audio.seekTime(start_sec);
-
+    
     audio.play();
 }
 void Composed::update(){
     if (not music) { return; }
     latest_notes    = next_note;
     next_note       = music.get_next_note_index(current_beat);
-
-    renderer.update_autoscrool(current_beat, music.get_music_length_in_beat());
-    if (is_playing){
+    if (get_is_playing()){
         current_beat += music.get_beats_per_seconds(current_beat) * Scene::DeltaTime();
         if (current_beat >= music.get_music_length_in_beat()){
             current_beat = music.get_music_length_in_beat();

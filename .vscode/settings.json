@@ -66,6 +66,13 @@
         "memory_resource": "cpp",
         "utility": "cpp",
         "regex": "cpp",
-        "cassert": "cpp"
+        "cassert": "cpp",
+        "fstream": "cpp",
+        "__locale": "cpp",
+        "__verbose_abort": "cpp",
+        "cstdarg": "cpp",
+        "deque": "cpp",
+        "iomanip": "cpp",
+        "stack": "cpp"
     }
 }
