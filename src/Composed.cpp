@@ -1,16 +1,5 @@
 # include "Composed.hpp"
-
-String Composed::find_last_abc_block(const String& GPT_answer)
-{
-    const std::regex regex{"OUTPUT\\n```abc\\n([^`]+?)\\n```"};
-    std::string str_utf8 = GPT_answer.toUTF8();
-    std::smatch matches;
-    std::regex_search(str_utf8.cbegin(), str_utf8.cend(), matches, regex);
-    assert(matches.size() > 0);
-    
-    const std::string last_match_str = matches.str(matches.size() - 1);
-    return Unicode::FromUTF8(last_match_str);
-}
+# include "util.hpp"
 
 void Composed::play()
 {

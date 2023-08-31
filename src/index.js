@@ -30,7 +30,7 @@ function modify_midi(midi_raw) {
     const chord_track = midi.tracks[midi.tracks.length - 1];
     melody_track.name = "melody_track";
     chord_track.name = "chord_track";
-    arrange_chord_notes(chord_track);
+    //arrange_chord_notes(chord_track);
     return midi.toArray();
 }
 function arrange_chord_notes(chord_track) {

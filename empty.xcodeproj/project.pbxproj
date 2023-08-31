@@ -39,6 +39,8 @@
 		2CD8412C283263B2005013A6 /* libboost_filesystem.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 2CD8412B283263B2005013A6 /* libboost_filesystem.a */; };
 		9333ADE72A9C5C7300A5FB65 /* Layout.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9333ADE62A9C5C7300A5FB65 /* Layout.cpp */; };
 		9333ADE92A9C7DD400A5FB65 /* Main_test.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9333ADE82A9C7DD400A5FB65 /* Main_test.cpp */; };
+		9333ADEB2A9CF6BD00A5FB65 /* MusicalGPT4.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9333ADEA2A9CF6BD00A5FB65 /* MusicalGPT4.cpp */; };
+		934204C12A9FC40400E40348 /* util.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 934204C02A9FC40400E40348 /* util.cpp */; };
 		934A1B4C2A97856400F56AD9 /* ABCParser.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 934A1B492A97856400F56AD9 /* ABCParser.cpp */; };
 		934A1B4D2A97856400F56AD9 /* Music.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 934A1B4A2A97856400F56AD9 /* Music.cpp */; };
 		934A1B4E2A97856400F56AD9 /* NoteOccuranceEffect.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 934A1B4B2A97856400F56AD9 /* NoteOccuranceEffect.cpp */; };
@@ -51,6 +53,9 @@
 		9356BC002A96525800F494F6 /* Binasc.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9356BBFA2A96525800F494F6 /* Binasc.cpp */; };
 		9356BC012A96525800F494F6 /* MidiEvent.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9356BBFB2A96525800F494F6 /* MidiEvent.cpp */; };
 		9356BC022A96525800F494F6 /* MidiEventList.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9356BBFC2A96525800F494F6 /* MidiEventList.cpp */; };
+		93C8B0142A9E012200D80CA7 /* EmotionalController.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 93C8B0132A9E012200D80CA7 /* EmotionalController.cpp */; };
+		93DC94C82A9E6FE2000564F3 /* HistoryViewer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 93DC94C62A9E6FE2000564F3 /* HistoryViewer.cpp */; };
+		93DC94C92A9E6FE2000564F3 /* EditRoom.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 93DC94C72A9E6FE2000564F3 /* EditRoom.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -88,6 +93,8 @@
 		2CD8412B283263B2005013A6 /* libboost_filesystem.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libboost_filesystem.a; path = ../../lib/macOS/boost/libboost_filesystem.a; sourceTree = "<group>"; };
 		9333ADE62A9C5C7300A5FB65 /* Layout.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = Layout.cpp; path = src/Layout.cpp; sourceTree = "<group>"; };
 		9333ADE82A9C7DD400A5FB65 /* Main_test.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = Main_test.cpp; path = src/Main_test.cpp; sourceTree = "<group>"; };
+		9333ADEA2A9CF6BD00A5FB65 /* MusicalGPT4.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = MusicalGPT4.cpp; path = src/MusicalGPT4.cpp; sourceTree = "<group>"; };
+		934204C02A9FC40400E40348 /* util.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = util.cpp; path = src/util.cpp; sourceTree = "<group>"; };
 		934A1B492A97856400F56AD9 /* ABCParser.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = ABCParser.cpp; path = src/ABCParser.cpp; sourceTree = "<group>"; };
 		934A1B4A2A97856400F56AD9 /* Music.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = Music.cpp; path = src/Music.cpp; sourceTree = "<group>"; };
 		934A1B4B2A97856400F56AD9 /* NoteOccuranceEffect.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = NoteOccuranceEffect.cpp; path = src/NoteOccuranceEffect.cpp; sourceTree = "<group>"; };
@@ -101,6 +108,9 @@
 		9356BBFA2A96525800F494F6 /* Binasc.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = Binasc.cpp; path = src/midifile/Binasc.cpp; sourceTree = "<group>"; };
 		9356BBFB2A96525800F494F6 /* MidiEvent.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = MidiEvent.cpp; path = src/midifile/MidiEvent.cpp; sourceTree = "<group>"; };
 		9356BBFC2A96525800F494F6 /* MidiEventList.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = MidiEventList.cpp; path = src/midifile/MidiEventList.cpp; sourceTree = "<group>"; };
+		93C8B0132A9E012200D80CA7 /* EmotionalController.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = EmotionalController.cpp; path = src/EmotionalController.cpp; sourceTree = "<group>"; };
+		93DC94C62A9E6FE2000564F3 /* HistoryViewer.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = HistoryViewer.cpp; path = src/HistoryViewer.cpp; sourceTree = "<group>"; };
+		93DC94C72A9E6FE2000564F3 /* EditRoom.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = EditRoom.cpp; path = src/EditRoom.cpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -144,6 +154,11 @@
 		2C1778791CE0A9D800BB8AD0 = {
 			isa = PBXGroup;
 			children = (
+				934204C02A9FC40400E40348 /* util.cpp */,
+				93DC94C72A9E6FE2000564F3 /* EditRoom.cpp */,
+				93DC94C62A9E6FE2000564F3 /* HistoryViewer.cpp */,
+				93C8B0132A9E012200D80CA7 /* EmotionalController.cpp */,
+				9333ADEA2A9CF6BD00A5FB65 /* MusicalGPT4.cpp */,
 				9333ADE82A9C7DD400A5FB65 /* Main_test.cpp */,
 				9333ADE62A9C5C7300A5FB65 /* Layout.cpp */,
 				934A1B502A978CBF00F56AD9 /* Composed.cpp */,
@@ -288,6 +303,11 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				934204C12A9FC40400E40348 /* util.cpp in Sources */,
+				93DC94C82A9E6FE2000564F3 /* HistoryViewer.cpp in Sources */,
+				93DC94C92A9E6FE2000564F3 /* EditRoom.cpp in Sources */,
+				93C8B0142A9E012200D80CA7 /* EmotionalController.cpp in Sources */,
+				9333ADEB2A9CF6BD00A5FB65 /* MusicalGPT4.cpp in Sources */,
 				9333ADE92A9C7DD400A5FB65 /* Main_test.cpp in Sources */,
 				9333ADE72A9C5C7300A5FB65 /* Layout.cpp in Sources */,
 				934A1B512A978CBF00F56AD9 /* ComposedRenderer.cpp in Sources */,

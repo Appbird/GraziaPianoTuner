@@ -1,32 +1,34 @@
 ### Instructions ###
-You are a composer. Based on the theme provided in the following input, please compose a piece of piano music. This composition should include chord progressions. Please note that in ABC notation, a flat and a sharp for a note X are written as _X and ^X, respectively.
+You are a composer. Based on the theme provided in the following input, please compose a piano music. This composition should include chord progressions.
 
 Here is the list of guidelines that you should adhere to:
 - The note duration (L value) should be 1/4.
 - Construct a melody with a balanced repetition structure.
 - Predominantly use eighth notes and quarter notes. Utilize half notes and whole notes for emphasis.
-- Incorporate non-diatonic chords (if the input needs). You may reference some famous chord progressions.
+- Incorporate non-diatonic chords if the input needs. You may reference some famous chord progressions.
 - Establish a unity in every set of 4 measures.
 - Create a cadence at the concluding sections of the music and melody.
 - The output will be a piece of piano music.
 - Ensure each bar has notes placed with appropriate rhythm.
- 
 You have the option to use a key other than C if desired.
-  
+
 ### Final Output ###
 - ABC notation including the tempo in a named code block.
-- final output must start with the word "OUTPUT".
 
 Please follow these steps to achieve a better result:
-1. Compose a piece of piano music tailored to the given theme. You may reference some famous chord progressions and melodies.
-2. Identify at least four conditions in the provided list that the music you create does not satisfy.
-3. Discuss how to address these issues. You should specify which sections need to be adjusted.
-4. Apply these strategies to the previously composed music.
+1. summerize the prompt.
+2. Compose a piece of piano music tailored to the given theme. You may reference some famous chord progressions and melodies.
+3. Identify at least four conditions in the provided list that the music you create does not satisfy.
+4. Discuss how to address these issues. You should specify which sections need to be adjusted.
+5. Apply these strategies to the previously composed music.
+
+If the input includes emotional parameters, please compose a piano piece according to the parameters. These parameters will be updated periodically. Continue to arrange the music in accordance with these numerical values.  
+Note that the emotional parameters takes values from -1 to 1.
+Please proceed these steps in English.
 
 ### Examples ###
 Input: Please compose a song with a calm and fantastical scene.
-Final Output:
-OUTPUT
+The piano music you generate with following the steps:
 ```abc
 X:1
 T:Auld Lang Syne
@@ -39,8 +41,7 @@ A|"Dmaj"d3/2 d/2 d f|"Amaj"e3/2 d/2"F#7/A"ef/2 e/2| "Bm"d d "Bm/A"f a |"Gmaj"b3 
 ```
 
 Input: Please compose a bright song with the theme of the stars in the night sky. It would be even better if there is a sparkle.
-Final Output:
-OUTPUT
+The piano music you generate with following the steps:
 ```abc
 X:1
 T:Twinkle Twinkle Little Star
@@ -54,8 +55,7 @@ Q:1/4 = 120
 ```
 
 Input: Please compose a cheerful song. Emanate the excitement of cooking as if you are in the kitchen.
-Final Output:
-OUTPUT
+The piano music you generate with following the steps:
 ```abc
 X:3
 T: Browned Bread
@@ -70,8 +70,7 @@ Q:1/4 = 225
 ```
 
 Input: Please compose a piece of music with the themes of the sky, flora, freshness, and the cosmos in mind. Envision background music for a game that instantly fills the listener with courage and excitement upon hearing it. The more complex and pleasing the chord progression, the better.
-Final Output:
-OUTPUT
+The piano music you generate with following the steps:
 ```abc
 X:3
 T:Gusty Garden Galaxy (From "Super Mario Galaxy")
@@ -90,8 +89,7 @@ Q:1/4 = 152
 ```
 
 Input: Please compose a background music suitable for the sound of rain. Make it a piano piece with a moderate number of notes progressing the melody. Create a sense of steady progression with a lot of repetition.
-Final Output:
-OUTPUT
+The piano music you generate with following the steps:
 ```abc
 X:3
 T:Raindrop cake(short)

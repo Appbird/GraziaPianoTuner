@@ -61,7 +61,7 @@ class ComposedViewer{
         {
             //https://siv3d.github.io/ja-jp/tutorial2/gui/?h=%E3%82%A2%E3%82%A4%E3%82%B3%E3%83%B3#283-gui-%E3%81%AB%E3%81%8A%E3%81%91%E3%82%8B%E3%82%A2%E3%82%A4%E3%82%B3%E3%83%B3%E3%81%AE%E4%BD%BF%E7%94%A8
             font_for_meta_info(
-                U"{}  /  Key : {}"_fmt(music.get_title(), music.get_key())
+                U"{} / Key : {}"_fmt(music.get_title(), music.get_key())
             ).drawBase(
                 Point{information_area.leftX() + 10, information_area.bottomY()}
             );
@@ -93,6 +93,8 @@ class ComposedViewer{
          * @param occur_end         今フレームで再生エフェクトを生起させるべきノートのうち、最も番号が大きいものの次のイテレーター。
          */
         void render(const Composed& composed) const;
-        void update(Composed& composed);
-        
+        void update(Composed& composed, bool stopper_enabled);
+        void reset_scroll(){
+            earliest_beat = 0;
+        }
 };

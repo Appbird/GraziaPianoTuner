@@ -20,7 +20,7 @@ function modify_midi(midi_raw:Uint8Array):Uint8Array{
     chord_track.name = "chord_track";
     
     
-    arrange_chord_notes(chord_track);
+    //arrange_chord_notes(chord_track);
     return midi.toArray();
 }
 

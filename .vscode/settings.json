@@ -73,6 +73,13 @@
         "cstdarg": "cpp",
         "deque": "cpp",
         "iomanip": "cpp",
-        "stack": "cpp"
+        "stack": "cpp",
+        "stop_token": "cpp",
+        "format": "cpp",
+        "__tree": "cpp",
+        "list": "cpp",
+        "map": "cpp",
+        "__availability": "cpp",
+        "semaphore": "cpp"
     }
 }

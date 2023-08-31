@@ -8,6 +8,9 @@
 # include "Composed.hpp"
 
 void ComposedViewer::set_renderer_area(const Rect& arg_render_area){
+    const FilePath font_logotype_path = FileSystem::GetFolderPath(SpecialFolder::UserFonts) + U"ロゴたいぷゴシック.otf";
+    const FilePath font_smart_path = FileSystem::GetFolderPath(SpecialFolder::UserFonts) + U"03スマートフォントUI.otf";
+    
     render_area = arg_render_area;
     RectSlicer layout{ render_area, RectSlicer::Y_axis };
     information_area            = layout.to(0.1).stretched(-2);
@@ -20,9 +23,9 @@ void ComposedViewer::set_renderer_area(const Rect& arg_render_area){
         notes_area = piano_role_right.to(1.0).stretched(-2);
     }
 
-    font_for_keynumber = Font{int(height_per_pitch())};
-    font_for_meta_info = Font{information_area.h};
-    font_for_chord     = Font{int(chord_area.h * 0.8)};
+    font_for_keynumber = Font{int(height_per_pitch()),font_logotype_path, };
+    font_for_meta_info = Font{int(information_area.h * 0.8), font_logotype_path};
+    font_for_chord     = Font{int(chord_area.h * 0.8), font_smart_path};
 }
 
 void ComposedViewer::render_frame() const{
@@ -51,6 +54,8 @@ void ComposedViewer::render_beat() const{
             notes_area.tl() + offset,
             notes_area.bl() + offset
         }.draw(thickness, HSV{0, 0, color_value});
+        if (b % 4 == 0) { font_for_chord(Format(b)).draw(height_per_pitch(), notes_area.tl() + offset, ColorF{0.6}); }
+        
     }
 }
 void ComposedViewer::render_pitch() const{
@@ -123,16 +128,23 @@ Rect ComposedViewer::note_rect(const Note& note) const{
 }
 
 void ComposedViewer::render_chord_information(const Music& music) const{
+    Graphics2D::SetScissorRect(chord_area);
+    RasterizerState rs = RasterizerState::Default2D;
+    rs.scissorEnable = true;
+    const ScopedRenderStates2D rasterizer{rs};
+
     const auto chord_start = music.get_next_chord_index(earliest_beat) - 1;
     const auto chord_end = music.get_next_chord_index(latest_beat());
     for (auto iter = chord_start; iter < chord_end; iter++){
         const double offset = (iter->start_beats - earliest_beat) * width_per_beat();
         font_for_chord(iter->chord).drawBaseAt(
             chord_area.leftX() + font_for_chord.fontSize() * 1.5 + offset,
-            chord_area.bottomY() - font_for_chord.fontSize() * 0.2
+            chord_area.bottomY() - font_for_chord.fontSize() * 0.2,
+            ColorF{0.7}
         );
     }
 }
+
 
 void ComposedViewer::update_scroll(){
     if (not notes_area.mouseOver()) { return; }
@@ -153,9 +165,14 @@ void ComposedViewer::render(const Composed& composed) const {
     assert(music.get_notes().begin() <= occur_begin and occur_begin <= music.get_notes().end());
     assert(music.get_notes().begin() <= occur_end   and occur_end <= music.get_notes().end());
     piano_renderer.render_piano(lowest_pitch, highest_pitch(), height_per_pitch(), font_for_keynumber);
-    render_frame();
-    render_pitch();
-    render_beat();
+    {
+        Graphics2D::SetScissorRect(notes_area);
+        RasterizerState rs = RasterizerState::Default2D;
+        rs.scissorEnable = true;
+        render_frame();
+        render_pitch();
+        render_beat();
+    }
 
     if (music)
     {
@@ -181,7 +198,7 @@ void ComposedViewer::render(const Composed& composed) const {
     }
 }
 
-void ComposedViewer::update(Composed& composed)
+void ComposedViewer::update(Composed& composed, bool stopper_enabled)
 {
     if (not composed.get_music()){ return; }
     const double max_beat               = composed.get_music().get_music_length_in_beat();
@@ -197,7 +214,7 @@ void ComposedViewer::update(Composed& composed)
 
     // ユーザー入力
     if (const auto beat = clicked_beat()){ composed.seek(*beat); }   
-    if (KeySpace.down())
+    if (KeySpace.down() and stopper_enabled)
     {
         if (composed.get_is_playing())
         {

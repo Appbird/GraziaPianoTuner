@@ -1,0 +1,69 @@
+[
+    {
+      "answer": "\n```abc\nX:1\nT: Bright Daybreak (Revised)\nM:4/4\nL:1/4\nK:D\nQ:1/4 = 80\n|: \"Dmaj\"D2 F2 | \"Gmaj\"A4 | \"Em\"A2 G2 | \"F#7\"F4 :|\n| \"Dmaj\"D2 F2 | \"Gmaj7\"G2 B/2A/2G/2F/2 | \"Em\" E2 F2 | \"B7\"A4 |\n| \"Dmaj\"D2 F2 | \"Gmaj\"A4 | \"Em\"A2 G2 | \"F#7\"F4 |\n| \"Dmaj\"D2 F2 | \"Gmaj7\"G2 B/2A/2G/2F/2 | \"Em\" E2 F2 | \"Dmaj\"D4 |\n```",
+      "params": {
+        "Vec2": {
+          "x": -1.0,
+          "y": 1.0
+        },
+        "X_axis": "躍動感",
+        "Y_axis": "明るさ",
+        "is_used": true
+      },
+      "request": ""
+    },
+    {
+      "answer": "\n```abc\nX:1\nT: Bright Daybreak (Revised)\nM:4/4\nL:1/4\nK:D\nQ:1/4 = 85\n|: \"Dmaj\"D2 F2 | \"Gmaj\"A2 A/2G/2F/2E/2 | \"Em\"A2 G2 | \"F#7\"F4 :|\n| \"Dmaj\"D2 F2 | \"Gmaj7\"G2 B/2A/2G/2F/2 | \"Em\" E2 F2 | \"B7\"A2 A/2B/2c/2d/2 |\n| \"Dmaj\"D2 F2 | \"Gmaj\"A2 A/2G/2F/2E/2 | \"Em\"A2 G2 | \"F#7\"F4 |\n| \"Dmaj\"D2 F2 | \"Gmaj7\"G2 B/2A/2G/2F/2 | \"Em\" E2 F2 | \"Dmaj\"D4 |\n```",
+      "params": {
+        "Vec2": {
+          "x": -0.33,
+          "y": 1.0
+        },
+        "X_axis": "躍動感",
+        "Y_axis": "明るさ",
+        "is_used": true
+      },
+      "request": ""
+    },
+    {
+      "answer": "\n```abc\nX:1\nT: Bright Daybreak (2nd Revision)\nM:4/4\nL:1/4\nK:D\nQ:1/4 = 120\n|: \"Dmaj\"D2 F2 | \"Gmaj\"G2 A2 | \"Em\"A2 A/2B/2c/2d/2 | \"F#7\"F4 :|\n| \"Dmaj\"F2 F/2E/2F/2G/2 | \"Gmaj7\"A2 B/2A/2G/2F/2 | \"Em\"E2 F2 | \"B7\"A4 |\n| \"Dmaj\"D2 F2 | \"Gmaj\"G2 A2 | \"Em\"A2 A/2B/2c/2d/2 | \"F#7\"F4 |\n| \"Dmaj\"F2 F/2E/2F/2G/2 | \"Gmaj7\"A2 B/2A/2G/2F/2 | \"Em\"E2 F2 | \"Dmaj\"D4 |\n\n```",
+      "params": {
+        "Vec2": {
+          "x": 1.0,
+          "y": 1.0
+        },
+        "X_axis": "躍動感",
+        "Y_axis": "明るさ",
+        "is_used": true
+      },
+      "request": ""
+    },
+    {
+      "answer": "\n```abc\nX:1\nT: Bright Daybreak (3rd Revision)\nM:4/4\nL:1/4\nK:Dm\nQ:1/4 = 120\n|: \"Dm\"D2 F2 | \"Gm\"G2 A2 | \"Am\"A2 A/2B/2c/2d/2 | \"C7\"C4 :|\n| \"Dm\"F2 F/2E/2F/2G/2 | \"Am\"A2 B/2A/2G/2F/2 | \"Bb\"B2 C2 | \"A7\"C4 |\n| \"Dm\"D2 F2 | \"Gm\"G2 A2 | \"Am\"A2 A/2B/2c/2d/2 | \"C7\"C4 |\n| \"Dm\"F2 F/2E/2F/2G/2 | \"Am\"A2 B/2A/2G/2F/2 | \"Bb\"B2 C2 | \"Dm\"D4 |\n```",
+      "params": {
+          "Vec2": {
+            "x": 1.0,
+            "y": -0.33
+          },
+          "X_axis": "躍動感",
+          "Y_axis": "明るさ",
+          "is_used": true
+        },
+        "request": ""
+      
+    },
+    {
+        "answer": "\n```abc\nX:1\nT:Bright Daybreak (4th Revision)\nM:4/4\nL:1/4\nK:Dm\nQ:1/4 = 120\n|: \"Dm\"D2 F2 | \"Gm\"G2 A2 | \"Bbmaj7\"A2 A/2B/2c/2d/2 | \"C7\"C4 :|\n| \"Gm\" F2 F/2E/2F/2G/2 | \"Bb\"A2 B/2A/2G/2F/2 | \"C7\"B2 C2 | \"A7sus4\"A4 |\n| \"Dm\"D2 F2 | \"Gm\"G2 A2 | \"Bbmaj7\"A2 A/2B/2c/2d/2 | \"C7\"C4 |\n| \"Gm\"F2 F/2E/2F/2G/2 | \"Bb\"A2 B/2A/2G/2F/2 | \"C7\"B2 C2 | \"Dm\"D4 |\n\n```",
+        "params": {
+            "Vec2": {
+              "x": 1.0,
+              "y": -1.0
+            },
+            "X_axis": "躍動感",
+            "Y_axis": "明るさ",
+            "is_used": true
+          },
+          "request": ""
+        
+    }
+  ]
