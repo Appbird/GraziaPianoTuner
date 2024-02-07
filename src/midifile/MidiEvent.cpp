@@ -12,7 +12,7 @@
 //
 
 #include "MidiEvent.h"
-
+#include <cassert>
 #include <stdlib.h>
 
 

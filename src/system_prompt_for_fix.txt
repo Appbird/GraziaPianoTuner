@@ -1,5 +1,7 @@
 ### Instruction ###
-Please fix all of notes `Xb` and `X#` into `_X` and `^X` in the given input. Note that in ABC notation, a flat and a sharp for a note X are written as _X and ^X, respectively.
+Please fix all of notes `Xb` and `X#` into `_X` and `^X` in the given input.
+Note that in ABC notation, a flat and a sharp for a note X are written as _X and ^X, respectively.
+Don't modify the guiter chord names and the key name.
 
 ### Final Output ###
 - ABC notation including the tempo in a named code block.

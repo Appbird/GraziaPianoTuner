@@ -83,6 +83,7 @@ void EditRoom::render(){
     history.render();
 
     if (musicalGPT4.is_downloading()){
+        Scene::Rect().draw(ColorF{0, 0.4});
         Circle{ Scene::Center(), 50 }.drawArc((Scene::Time() * 120_deg), 300_deg, 4, 4);
     }
 }
