@@ -44,12 +44,12 @@ void EditRoom::update(){
     // デバッグ
     if (KeyUnderscore_JIS.down()){ musicalGPT4.dump_answer(); }
     if (menu_area.leftClicked()){
-        if (musicalGPT4.model == OpenAI::Model::GPT3_5_Turbo) {
-            musicalGPT4.model = OpenAI::Model::GPT3_5_Turbo_16K;
-        } else if (musicalGPT4.model == OpenAI::Model::GPT3_5_Turbo_16K){
+        if (musicalGPT4.model == OpenAI::Model::GPT4){
+            musicalGPT4.model = OpenAI::Model::GPT4_32K;
+        } else if (musicalGPT4.model == OpenAI::Model::GPT4_32K){
+            musicalGPT4.model = U"gpt-4o";
+        } else if (musicalGPT4.model == U"gpt-4o") {
             musicalGPT4.model = OpenAI::Model::GPT4;
-        } else if (musicalGPT4.model == OpenAI::Model::GPT4){
-            musicalGPT4.model = OpenAI::Model::GPT3_5_Turbo;
         }
     }
 }

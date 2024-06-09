@@ -11,6 +11,7 @@ String MusicalGPT4::construct_prompt(const String& user_request, const Emotional
 
 void MusicalGPT4::request(const String& user_requset, const EmotionalController& emotional_controller)
 {
+    Console << U"[INFO] Start Request.";
     if (history.size() == 1){
         history[0].second += U"\n\n" + construct_prompt(user_requset, emotional_controller);
     } else {
@@ -32,7 +33,11 @@ String MusicalGPT4::get_answer(){
     if (not debug){
         if (task_for_revising.getResponse().isOK())
         {
-            return OpenAI::Chat::GetContent(task_for_composing.getAsJSON()).replaced(U"OUTPUT", U"") + U"\n" + OpenAI::Chat::GetContent(task_for_revising.getAsJSON());
+            Console << U"[INFO] got answer";
+            return 
+                OpenAI::Chat::GetContent(task_for_composing.getAsJSON()).replaced(U"OUTPUT", U"")
+                + U"\n"
+                + OpenAI::Chat::GetContent(task_for_revising.getAsJSON());
         }
         else
         {

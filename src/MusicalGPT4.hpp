@@ -8,7 +8,7 @@ class EmotionalController;
 
 class MusicalGPT4{
     public:
-        StringView model = OpenAI::Model::GPT4;
+        StringView model = U"gpt-4o";
     private:
         String GPT_API_KEY;
         String system_prompt;

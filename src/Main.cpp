@@ -31,6 +31,8 @@ void Main()
     test_main();
     Window::SetTitle(U"Grazie Piano Tuner4");
 	Window::Resize(1500, 1000);
+    Scene::SetResizeMode(ResizeMode::Keep);
+    Window::SetStyle(WindowStyle::Sizable);
     Rect window_rect{Point::Zero(), Scene::Size()};
     Scene::SetBackground(HSV{210, 0.1, 0.15});
     

@@ -4,7 +4,7 @@
 
 class EmotionalController{
     public:
-        bool using_param = true;
+        bool using_param = false;
         struct EmotionalParameters{
             String X_axis;
             String Y_axis;

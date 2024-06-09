@@ -28,72 +28,42 @@ Please proceed these steps in English.
 - ABC notation including the tempo in a named code block.
 
 ### Examples ###
-Input: Please compose a song with a calm and fantastical scene.
-The piano music you generate with following the steps:
 ```abc
-X:1
-T:Auld Lang Syne
-M:4/4
-K:D
+X: 1
+T: Sunny, Shiny Forest Revised
+M: 4/4
 L: 1/4
-Q: 1/4 = 85
-A|"Dmaj"d3/2 d/2 d f|"Amaj"e3/2 d/2"F#7/A"ef/2 e/2| "Bm"d d "Bm/A"f a |"Gmaj"b3 b|
-"Dmaj"a3/2 f/2 f d| "Amaj"e3/2 d/2 "F#maj/A"ef/2e/2| "Gmaj"d3/2 B/2"A7"B A |"Dmaj"d4| 
+Q: 1/4=160
+K: A major
+V:1
+|: "A" ceeA | "D" df^cd | "Bm" eA^ce | "E7" ^G2e2 |
+| "A" aece | "F#m" f^fed | "D" dBA^G | "A" A2 z2 :|
+| "D" d2 fd | "C#m" e^ceg | "Bm" bABc | "E7" e4 |
+| "A" c'ba^g | "D" afed | "A/C#" cBA^G | "A" A4 |]
 ```
 
-Input: Please compose a bright song with the theme of the stars in the night sky. It would be even better if there is a sparkle.
-The piano music you generate with following the steps:
 ```abc
 X:1
-T:Twinkle Twinkle Little Star
-M:4/4
-K:C
-L:1/4
-Q:1/4 = 120
-"Cmaj"C C "C"G G | "Fmaj"A A "Cmaj"G2 | "Fm"F F "Cmaj"E E | "Gmaj7"D D "Cmaj"C2 |
-"Cmaj"G G "Fm"F F | "Cmaj"E E "Gmaj"D2 | "C"G G "Fm"F F | "Cmaj"E E "Gmaj"D2 |
-"Cmaj"C C "G"G G | "Fmaj"A A "Cmaj"G2 | "Fm"F F "Cmaj"E E | "Gmaj"D D "Cmaj"C2 |
+ T:Raindrop Melody Revised
+ C:AI Composer
+ M:4/4
+ L:1/4
+ Q:1/4=120
+ K:Dm
+ "Dm" d2 "A7/C#" cB | "Bb" AG "Gm/A" F2 | "Gm/Bb" G2 "A7" F2 | "Dm" D4 ||
+ "Dm/C" c2 "Bdim/A" BA | "Gm" G3 "A7" A | "Dm/F" F2 "E7/G#" GA | "Am" A4 ||
+ "Dm" d3 "A7/C#" c | "Bb" AG "Gm/A" F2 | "Gm/Bb" G2 "A7" F2 | "Dm" D4 ||
+ "Dm/C" c2 "Bdim/A" BA | "Gm" G3 "A7" A | "Dm/F" F2 "E7/G#" GA | "Am" A4 ||
 ```
 
-Input: Please compose a cheerful song. Emanate the excitement of cooking as if you are in the kitchen.
-The piano music you generate with following the steps:
 ```abc
-X:3
-T: Browned Bread
+X:1
+T:Sunny, Shiny, Forest
 M:4/4
-L:1/4
+Q:1/4 = 180
 K:D
-Q:1/4 = 225
-|"Dmaj"fefg|"Amaj"f2 e2|"Bm"edef|"Amaj"e2d2|
-|"Gmaj"dcBF|"F#m"Aade|"Em7"fz3|"A7"z4|
-|"Dmaj"fefg|"Amaj"f2 e2|"Bm"edef|"Amaj"e2d2|
-|"Gmaj"dcBF|"F#m"A2"F#sus4"c2|"Dmaj"d4|z4|
-```
-
-
-Input: Please compose a background music suitable for the sound of rain. Make it a piano piece with a moderate number of notes progressing the melody. Create a sense of steady progression with a lot of repetition.
-The piano music you generate with following the steps:
-```abc
-X:3
-T:Raindrop cake(short)
-M:4/4
-L:1/4
-K:C
-Q:1/4=90
-|F,/2A,/2C/2E3/2 z|E,/2G,/2B,/2D3/2 z|F,/2A,/2c,/2e,3/2 z|E,/2G,/2B,/2D3/2 z|
-|F,/2A,/2C/2E3/2 z|E,/2G,/2B,/2D3/2 z|
-Q:1/4=80
-F,/2A,/2C/2E3/2 z|
-Q:1/4=70
-E,/2G,/2B,/2D3/2 z|
-Q:1/4=90
-|"Fmaj"E4|G2 CD|"Em" D3/2 C3/2 z/2 c'/2|B'/2 G'/2E'3/2 z3/2|
-|"Fmaj"E4|G2 CD|"Em" D3/2 E3/2 z/2 c'/2|B'/2 G'/2B'3/2 z3/2|
-|"Fmaj"F,/2A,/2C/2E3/2 z|"Em"E,/2G,/2B,/2D3/2 z|"Fmaj"F,/2A,/2c,/2e,3/2 z|"Em"E,/2G,/2B,/2D3/2 z|
-|"Fmaj"F,/2A,/2C/2E3/2 z|"Em"E,/2G,/2B,/2D3/2 z|"Fmaj"F,/2A,/2c,/2e,3/2 z|"Em"E,/2G,/2B,/2D3/2 G|
-K:D
-|"Gmaj"B z/2 A z/2 e|B3/2A5/2|"F#m"A z/2 F d3/2|"Baug"A3/2 G5/2|
-|"Em7" G3/2 E F/2 G/2F/2|"F#7" z3/2 D3/2C|"Bm"D4|z4|
-|"Gmaj"B z/2 A z/2 e|B3/2A5/2|"F#m"A z/2 F d3/2|"Baug"A3/2 G5/2|
-|"Em7" G3/2 F F E/2|"E9sus4"E3/2 E/2  DC|"D"D4|z4|
+| "Dmaj7" DFAF "A7" ACEA | "Gmaj7" GBdB "F#m7" AFCE | "Em7" EGBE "Bm7" DFAD | "E7" ^GBDG "A7" AECA |
+| "Dmaj7" DFAF "Gmaj7" GBdB | "F#m7" AFCE "Bm7" DFAD | "E7" ^GBDG "A7" AECA | "Dmaj7" DFAF "A7" A2E2 |
+| "Dmaj7" D2F2 "Gmaj7" G2B2 | "F#m7" AFCE "Em7" GBDG | "A7" AECA "Dmaj7" D2F2 | "Gmaj7" G2B2 "A7" A2E2 |
+| "Dmaj7" D4 "Gmaj7" G4 | "F#m7" AFCE "Bm7" DFAD | "E7" ^GBDG "A7" AECA | "Dmaj7" D2F2 "A7" A2E2 |"Dmaj7" D2 C2 D4 |
 ```
