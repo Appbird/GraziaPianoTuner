@@ -153,15 +153,15 @@ void Main()
             }
         }
         if (button_ex1.leftClicked()){
-            edit_room.history.load_json(U"/Users/AppleBird/Documents/programming/VSCodeProject/siv3d_v0.6.11_macOS/examples/GraziePianoTuner4/archive/brightsun.json");
+            edit_room.history.load_json(U"~/Documents/Projects/siv3d_v0.6.13_macOS/examples/GraziaPianoTuner/archive/brightsun.json");
             edit_room.musicalGPT4.remember_from_snapshots(edit_room.history.see_snapshots());
         }
         if (button_ex2.leftClicked()){
-            edit_room.history.load_json(U"/Users/AppleBird/Documents/programming/VSCodeProject/siv3d_v0.6.11_macOS/examples/GraziePianoTuner4/archive/cafe_serenity.json");
+            edit_room.history.load_json(U"~/Documents/Projects/siv3d_v0.6.13_macOS/examples/GraziaPianoTuner/archive/cafe_serenity.json");
             edit_room.musicalGPT4.remember_from_snapshots(edit_room.history.see_snapshots());
         }
         if (button_ex3.leftClicked()){
-            edit_room.history.load_json(U"/Users/AppleBird/Documents/programming/VSCodeProject/siv3d_v0.6.11_macOS/examples/GraziePianoTuner4/archive/bright_daybreak.json");
+            edit_room.history.load_json(U"~/Documents/Projects/siv3d_v0.6.13_macOS/examples/GraziaPianoTuner/archive/bright_daybreak.json");
             edit_room.musicalGPT4.remember_from_snapshots(edit_room.history.see_snapshots());
         }
 

@@ -13,14 +13,6 @@ Here is the list of guidelines that you should adhere to:
 - Ensure each bar has notes placed with appropriate rhythm.
 You have the option to use a key other than C if desired.
 
-### Final Output ###
-Please follow these steps to achieve a better result:
-1. summerize the prompt.
-2. Compose a piece of piano music tailored to the given theme. You may reference some famous chord progressions and melodies.
-3. Identify at least four conditions in the provided list that the music you create does not satisfy.
-4. Discuss how to address these issues. You should specify which sections need to be adjusted.
-5. Apply these strategies to the previously composed music.
-
 If the input includes emotional parameters, please compose a piano piece according to the parameters. These parameters will be updated periodically. Continue to arrange the music in accordance with these numerical values.  
 Note that the emotional parameters takes values from -1 to 1.
 Please proceed these steps in English.

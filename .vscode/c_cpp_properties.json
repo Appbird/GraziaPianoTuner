@@ -6,6 +6,7 @@
                 "${workspaceFolder}/**",
                 "../../include",
 				"../../include/ThirdParty",
+                "~/Documents/library/midifile/include",
                 "/Users/AppleBird/Documents/programming/library/cpp/midifile/include"
 
             ],

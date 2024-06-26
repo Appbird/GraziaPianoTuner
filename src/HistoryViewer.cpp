@@ -19,7 +19,7 @@ void HistoryViewer::render(){
 
 void HistoryViewer::save(const String& title){
     const DateTime t = DateTime::Now();
-    const FilePath directory_path = U"/Users/AppleBird/Documents/programming/VSCodeProject/siv3d_v0.6.11_macOS/examples/GraziePianoTuner4/archive/";
+    const FilePath directory_path = U"~/Documents/Projects/siv3d_v0.6.13_macOS/examples/GraziaPianoTuner/archive/";
     const FilePath jsonpath = directory_path + U"{}-{}.json"_fmt(title, t).replace(U" ", U"_");
     JSON json;
     for (const Snapshot& snapshot:snapshots){

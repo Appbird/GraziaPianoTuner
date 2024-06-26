@@ -3,3 +3,4 @@ icon.icns
 build
 node_modules
 src/OPEN_AI_KEY.txt
+.DS_Store
