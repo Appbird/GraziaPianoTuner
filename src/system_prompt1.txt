@@ -17,7 +17,7 @@ You have the option to use a key other than C if desired.
 ABC notation including the tempo in a named code block.
 
 # If the input includes conceptual parameters
-Firstly, please evaluate the output parameter value on music, and report their values in this format.
+Firstly, please evaluate the output parameter value on the current music, and report their values in this format.
 ```axis
 [axis-1 name]: [axis-1 value]
 [axis-2 name]: [axis-2 value]
