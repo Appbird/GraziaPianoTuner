@@ -40,7 +40,7 @@ void Main()
 	const Font font{ FontMethod::MSDF, 48, Typeface::Bold };    
     
 	// 環境変数から API キーを取得する
-    TextReader api_key_text{U"../src/OPEN_AI_KEY.txt"};
+    TextReader api_key_text{U"../src/credential/OPEN_AI_KEY.txt"};
 	const String API_KEY = api_key_text.readAll();
     assert(not API_KEY.empty());
     

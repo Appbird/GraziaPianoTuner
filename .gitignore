@@ -2,5 +2,5 @@ App
 icon.icns
 build
 node_modules
-src/OPEN_AI_KEY.txt
+src/credential/OPEN_AI_KEY.txt
 .DS_Store

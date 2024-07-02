@@ -1,0 +1,10 @@
+X:1
+T:Sunny, Shiny, Forest
+M:4/4
+Q:1/4 = 180
+L:1/8
+K:D
+|: "Dmaj7" DFAF "A7" ACEA | "Gmaj7" GBdB "F#m7" AFCE | "Em7" EGBE "Bm7" DFAD | "E7" ^GBDG "A7" AECA :|
+|: "Dmaj7" DFAF "Gmaj7" GBdB | "F#m7" AFCE "Bm7" DFAD | "E7" ^GBDG "A7" AECA | "Dmaj7" DFAF "A7" A2E2 :|
+|: "Dmaj7" D2F2 "Gmaj7" G2B2 | "F#m7" AFCE "Em7" GBDG | "A7" AECA "Dmaj7" D2F2 | "Gmaj7" G2B2 "A7" A2E2 :|
+|: "Dmaj7" D4 "Gmaj7" G4 | "F#m7" AFCE "Bm7" DFAD | "E7" ^GBDG "A7" AECA | "Dmaj7" D2F2 "A7" A2E2 "Dmaj7" D4 :|
