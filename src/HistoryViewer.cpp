@@ -17,10 +17,9 @@ void HistoryViewer::render(){
     }
 }
 
-void HistoryViewer::save(const String& title){
-    const DateTime t = DateTime::Now();
+void HistoryViewer::save(const String& title, const DateTime& timestamp){
     const FilePath directory_path = U"./archive/";
-    const FilePath jsonpath = directory_path + U"{}-{}.json"_fmt(title, t).replace(U" ", U"_");
+    const FilePath jsonpath = directory_path + U"{}-{}.json"_fmt(title, timestamp).replace(U" ", U"_");
     JSON json;
     for (const Snapshot& snapshot:snapshots){
         json.push_back(snapshot.encode());

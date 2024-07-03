@@ -22,7 +22,7 @@ private:
     TextAreaEditState GPT_answer_text_state;
 
     // レイアウト
-    const FilePath font_smart_path = FileSystem::GetFolderPath(SpecialFolder::UserFonts) + U"03スマートフォントUI.otf";
+    FilePath font_smart_path;
     Rect all_area;
     Rect composed_area;
         Rect input_textbox_area;
@@ -32,6 +32,7 @@ private:
     Rect GPT_answer_guide_area; Font GPT_answer_guide_font;
     Rect GPT_answer_area;
     Rect menu_area;
+    
 
     void set_rect(const Rect& rect);
 
@@ -55,8 +56,10 @@ private:
     }
     
 public:
+    EditRoom(){}
     EditRoom(const String& GPT_API_KEY, const Rect& area):
-        musicalGPT4{GPT_API_KEY}
+        musicalGPT4{GPT_API_KEY},
+        font_smart_path(FileSystem::GetFolderPath(SpecialFolder::UserFonts) + U"03スマートフォントUI.otf")
     {
         set_rect(area);
         composed_viewer.set_renderer_area(composed_area);

@@ -98,7 +98,7 @@ class HistoryViewer
             }
         }
         void render();
-        void save(const String& title);
+        void save(const String& title, const DateTime& timestamp);
         void load_json(const FilePath& path);
         const Array<Snapshot>& see_snapshots(){
             return snapshots;

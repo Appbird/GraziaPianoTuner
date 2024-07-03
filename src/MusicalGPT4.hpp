@@ -25,6 +25,7 @@ class MusicalGPT4{
         String get_answer();
         
     public:
+        MusicalGPT4(){}
         MusicalGPT4(String arg_GPT_API_KEY):
             GPT_API_KEY(arg_GPT_API_KEY)
         {
