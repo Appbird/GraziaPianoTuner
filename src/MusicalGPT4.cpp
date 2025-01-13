@@ -33,7 +33,7 @@ String MusicalGPT4::get_answer(){
     if (not debug){
         if (task_for_revising.getResponse().isOK())
         {
-            Console << U"[INFO] got answer";
+            Console << U"[INFO] received answer";
             return 
                 OpenAI::Chat::GetContent(task_for_composing.getAsJSON()).replaced(U"OUTPUT", U"")
                 + U"\n"

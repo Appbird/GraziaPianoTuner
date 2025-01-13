@@ -41,7 +41,7 @@ static Array<ChordEvent> get_chord_progression_from_str(const std::string& str){
     int section = 0; // 小節
     bool in_chord = false;
     ChordEvent info{ U"", 0 };
-    for (const int i :step(start_index, (int)str.size())){
+    for (const int i :Range(start_index, (int)str.size()-1)){
         // 行頭の文字であった場合
         if (at_new_line) {
             // |が先頭文字であれば楽譜は続いている。そうでなければ読み込みを終了する。
@@ -73,7 +73,9 @@ static Array<ChordEvent> get_chord_progression_from_str(const std::string& str){
     // ここまでの処理だと、同じ拍数に異なるコードが記録されるケースがある。
     // 前の要素とbeatが重複している場合、それは二拍ごとに変化しているコード進行だといえる。
     // そのため、あとの方のbeat値を2だけ後にずらす修正を行う。
-    for (const int i:step(1, chord_info.size())){
+    snap(chord_info.size());
+    for (const int i:Range(1, chord_info.size()-1)){
+        snap(i);
         if (chord_info[i-1].start_beats == chord_info[i].start_beats){
             chord_info[i].start_beats += 2;
         }
@@ -85,12 +87,17 @@ static Array<ChordEvent> get_chord_progression_from_str(const std::string& str){
 void ABCParser::parse(const String& abc_notation)
 {
     std::string abc_notation_in_str = abc_notation.toUTF8();
+    
+    Console << U"[INFO] getting title, key, chord_info";
+    
     // メタ情報から一部読み取る。
     title       = get_title_from_str(abc_notation_in_str);
     key         = get_key_from_str(abc_notation_in_str);
     chord_info  = get_chord_progression_from_str(abc_notation_in_str);
     // 外部のnode.jsにMIDI解析を委託
     FilePath in_abc = FileSystem::UniqueFilePath();
+    
+    INFO("Compiling ABC format text.");
     
     TextWriter abc_writer{ in_abc };
     assert(abc_writer);
@@ -101,6 +108,10 @@ void ABCParser::parse(const String& abc_notation)
     int result = system(input_command.toUTF8().c_str());
     assert(result == 0);
     const String out_path = in_abc + U".out";
+    
+    INFO("Loading Audio and MIDI.");
+    
     audio = Audio{out_path};
     midi = smf::MidiFile{out_path.toUTF8()};
+
 }

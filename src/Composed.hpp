@@ -7,7 +7,7 @@
 # include "ComposedRenderer.hpp"
 # include "ABCParser.hpp"
 
-
+/** 作られた曲のデータを表す。 */
 class Composed{
     private:
         NoteIterator latest_notes;          /** すでに演奏された最後のノーツ */
@@ -25,6 +25,7 @@ class Composed{
             if (audio and music) {stop(); seek(0);}
             abc_score = find_last_abc_block(GPT_answer);
             ABCParser parser;
+            
             parser.parse(abc_score);
             audio = parser.get_audio();
             music = Music{parser};

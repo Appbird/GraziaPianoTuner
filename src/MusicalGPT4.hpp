@@ -36,7 +36,12 @@ class MusicalGPT4{
             history.push_back({U"user", system_prompt});
         }
         
+        /** LLMにuser_request, emotional_controllerの内容に基づいて、楽曲を新たに記述するようリクエストする。
+         * 出力の受け取りは非同期で行う必要がある。try_to_get_answer()を定期的に呼び出して、LLMからの応答が返ってきているかをチェックする必要がある。
+         * TODO: これをstd::futureを使って書き換える。
+         */
         void request(const String& user_requset, const EmotionalController& emotional_controller);
+        /** @brief request関数でリクエストをLLMに送った後、返答があった場合は、対話履歴にその返答を加えながら返す。返答がなかった場合はnoneを返す。 */
         Optional<String> try_to_get_answer(){
             if (is_ready()) {
                 const String answer = get_answer();

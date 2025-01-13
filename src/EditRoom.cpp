@@ -36,13 +36,14 @@ void EditRoom::update(){
 
     // GPT4からanswerを得られた時だけ更新。
     if (const auto ans = musicalGPT4.try_to_get_answer()){ set_GPT_answer(*ans); }
-    // 復元
+    // 履歴からの復元
     if (history.is_page_refreshed()){
         const auto& snapshot = history.pick_snapshot();
         restore(snapshot);
     }
     // デバッグ
     if (KeyUnderscore_JIS.down()){ musicalGPT4.dump_answer(); }
+    // モデル切り替え
     if (menu_area.leftClicked()){
         if (musicalGPT4.model == OpenAI::Model::GPT4){
             musicalGPT4.model = OpenAI::Model::GPT4_32K;
