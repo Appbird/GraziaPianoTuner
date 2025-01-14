@@ -80,6 +80,15 @@
         "list": "cpp",
         "map": "cpp",
         "__availability": "cpp",
-        "semaphore": "cpp"
+        "semaphore": "cpp",
+        "__threading_support": "cpp",
+        "cfenv": "cpp",
+        "charconv": "cpp",
+        "clocale": "cpp",
+        "complex": "cpp",
+        "execution": "cpp",
+        "set": "cpp",
+        "shared_mutex": "cpp",
+        "typeindex": "cpp"
     }
 }

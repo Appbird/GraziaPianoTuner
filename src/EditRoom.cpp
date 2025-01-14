@@ -33,6 +33,7 @@ void EditRoom::update(){
     composed_viewer.update(player, not user_request_text_state.active);
     emotional_controller.update();
     history.update();
+    
 
     // GPT4からanswerを得られた時だけ更新。
     if (const auto ans = musicalGPT4.try_to_get_answer()){ set_GPT_answer(*ans); }
@@ -43,7 +44,7 @@ void EditRoom::update(){
     }
     // デバッグ
     if (KeyUnderscore_JIS.down()){ musicalGPT4.dump_answer(); }
-    // モデル切り替え
+    // #TODO リファクタリング
     if (menu_area.leftClicked()){
         if (musicalGPT4.model == OpenAI::Model::GPT4){
             musicalGPT4.model = OpenAI::Model::GPT4_32K;
@@ -87,4 +88,19 @@ void EditRoom::render(){
         Scene::Rect().draw(ColorF{0, 0.4});
         Circle{ Scene::Center(), 50 }.drawArc((Scene::Time() * 120_deg), 300_deg, 4, 4);
     }
+}
+
+void EditRoom::reset(){
+    musicalGPT4 = MusicalGPT4{GPT_API_KEY};
+    player = Composed{};
+    composed_viewer = ComposedViewer{};
+    emotional_controller = EmotionalController{};
+    history = HistoryViewer{};
+    composed_viewer.set_renderer_area(composed_area);
+    emotional_controller.set_render_area(emotional_controll_area);
+    history.set_render_area(page_flipper_area);
+    user_request_text_state = TextAreaEditState{U""};
+    GPT_answer_text_state   = TextAreaEditState{U""};
+
+    starting_time_session = DateTime::Now();
 }

@@ -24,6 +24,10 @@ class Composed{
         void set_answer(const String& GPT_answer){
             if (audio and music) {stop(); seek(0);}
             abc_score = find_last_abc_block(GPT_answer);
+            if (abc_score.empty()) {
+                System::MessageBoxOK(U"ABC記譜法の抽出に失敗しました。");
+                return;
+            }
             ABCParser parser;
             
             parser.parse(abc_score);

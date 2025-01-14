@@ -16,15 +16,24 @@ You have the option to use a key other than C if desired.
 # Output
 ABC notation including the tempo in a named code block.
 
-# If the input includes conceptual parameters
-Firstly, please evaluate the output parameter value on the current music, and report their values in this format.
+
+# Evaluate Conceptual Parameters
+The range of the parameter is the closed interval from -1 to 1.
+
+When the instructions in the section #Input and parameters' meaning contradict each other: 
+- Please modify the melody of the music.
+- Feel free to change the chords, key, rhythm, and BPM as necessary.
+- match the music's atomosphere and the meaning of the given parameters' values in Section "# Current Conceptual Parameters".
+
+else:
+1. ignore this parameters and proceed the step of music generation.
+2. re-evaluate the parameters after music generation.
+3. then report their values in this format.
 ```axis
 [axis-1 name]: [axis-1 value]
 [axis-2 name]: [axis-2 value]
 ```
-When the parameter changes, please modify the melody of the music to match the given parameters' values.
-Feel free to change the chords, key, rhythm, and BPM as necessary.
-The range of the parameter is the closed interval from -1 to 1.
+
 
 # Examples
 ```abc
@@ -40,6 +49,10 @@ V:1
 | "D" d2 fd | "C#m" e^ceg | "Bm" bABc | "E7" e4 |
 | "A" c'ba^g | "D" afed | "A/C#" cBA^G | "A" A4 |
 ```
+```axis
+躍動感: 0.90
+明るさ: 0.95
+```
 
 ```abc
 X:1
@@ -54,6 +67,11 @@ K:Dm
 |"Dm" d3 "A7/C#" c | "Bb" AG "Gm/A" F2 | "Gm/Bb" G2 "A7" F2 | "Dm" D4 |
 |"Dm/C" c2 "Bdim/A" BA | "Gm" G3 "A7" A | "Dm/F" F2 "E7/G#" GA | "Am" A4 |
 ```
+```axis
+降水量: 0.50
+喜び: -1.0
+```
+
 
 ```abc
 X:1
@@ -66,4 +84,8 @@ K:D
 | "Dmaj7" D/2F/2A/2F/2 "Gmaj7" G/2B/2d/2B/2 | "F#m7" A/2F/2C/2E/2 "Bm7" D/2F/2A/2D/2 | "E7" ^G/2B/2D/2G/2 "A7" A/2E/2C/2A/2 | "Dmaj7" D/2F/2A/2F/2 "A7" AE |
 | "Dmaj7" DF "Gmaj7" GB | "F#m7" A/2F/2C/2E/2 "Em7" G/2B/2D/2G/2 | "A7" A/2E/2C/2A/2 "Dmaj7" DF | "Gmaj7" GB "A7" AE |
 | "Dmaj7" D2 "Gmaj7" G2 | "F#m7" A/2F/2C/2E/2 "Bm7" D/2F/2A/2D/2 | "E7" ^G/2B/2D/2G/2 "A7" A/2E/2C/2A/2 | "Dmaj7" DF "A7" AE |"Dmaj7" D C D2 |
+```
+```axis
+躍動感: 0.75
+重々しさ: -1.0
 ```

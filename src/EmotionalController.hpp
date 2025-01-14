@@ -1,10 +1,11 @@
 # pragma once
 # include <Siv3D.hpp>
 # include "Layout.hpp"
+# include "util.hpp"
 
 class EmotionalController{
     public:
-        bool using_param = false;
+        bool using_param = true;
         struct EmotionalParameters{
             String X_axis;
             String Y_axis;
@@ -38,12 +39,16 @@ class EmotionalController{
                 };
             }
             String describe() const{
-                return (is_used) ? U"\nEmotional Parameters::\n\t{}:{: .2f}\n\t{}:{: .2f}\n"_fmt(
+                String parameters_description = U"\t{}:{: .2f}\n\t{}:{: .2f}\n"_fmt(
                     X_axis,
                     emotional_parameters.x,
                     Y_axis,
                     emotional_parameters.y
-                ) : U"";
+                );
+                return (
+                    U"\n# Current Conceptual Parameters\n"
+                    "\n"
+                ) + parameters_description;
             }
         };
 
@@ -85,6 +90,7 @@ class EmotionalController{
             emotional_point.x = Clamp(emotional_point.x, -1.0, 1.0);
             emotional_point.y = Clamp(emotional_point.y, -1.0, 1.0);
         }
+        
     public:
         String describe() const{
             return EmotionalParameters{
@@ -97,6 +103,7 @@ class EmotionalController{
         void set_state(bool arg_active){
             active = arg_active;
         }
+        void set_answer(const String& answer);
         EmotionalController(){}
         EmotionalController(Rect& render_area){
             set_render_area(render_area);
@@ -116,6 +123,6 @@ class EmotionalController{
             x_axis_text_state   = TextEditState{snapshot.X_axis};
             y_axis_text_state   = TextEditState{snapshot.Y_axis};
             emotional_point     = snapshot.emotional_parameters;
-            using_param          = snapshot.is_used;
+            using_param         = snapshot.is_used;
         }
 };

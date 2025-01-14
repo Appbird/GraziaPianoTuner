@@ -1,0 +1,1 @@
+Translate given sentence in the user prompt into Japanesem, but keep the content of code block.

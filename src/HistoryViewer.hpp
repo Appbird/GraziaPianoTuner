@@ -103,6 +103,10 @@ class HistoryViewer
         const Array<Snapshot>& see_snapshots(){
             return snapshots;
         }
+
+        const void reset(){
+            snapshots.clear();
+        }
         
 
 
