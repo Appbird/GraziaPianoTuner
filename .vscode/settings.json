@@ -89,6 +89,8 @@
         "execution": "cpp",
         "set": "cpp",
         "shared_mutex": "cpp",
-        "typeindex": "cpp"
+        "typeindex": "cpp",
+        "text_encoding": "cpp",
+        "forward_list": "cpp"
     }
 }

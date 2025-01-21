@@ -1,0 +1,23 @@
+{
+    "title": "A json representation of input information for HarmonicGuide.",
+    "properties": {
+        "guide_version": {
+            "type":"number",
+            "minimum": 0
+        },
+        "count_of_bars": {
+            "type": "number",
+            "minimum": 0
+        },
+        "axis_name": {
+            "type": "string"
+        },
+        "sequence": {
+            "type": "array",
+            "items": {
+                "type": "number"
+            }
+        }
+    },
+    "required": ["count_of_bars", "axis_name", "sequence"]
+}

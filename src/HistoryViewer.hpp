@@ -3,6 +3,7 @@
 # include "Composed.hpp"
 # include "Layout.hpp"
 # include "EmotionalController.hpp"
+# include "HarmonicGuide.hpp"
 
 class HistoryViewer
 {
@@ -10,7 +11,8 @@ class HistoryViewer
         struct Snapshot{
             String request;
             String answer;
-            EmotionalController::EmotionalParameters params;
+            Optional<EmotionalController::EmotionalParameters> emotional_params;
+            Optional<HarmonicGuide::GuideParameter> guide_params;
             Snapshot(){}
             Snapshot(
                 const String& arg_request,
@@ -19,24 +21,49 @@ class HistoryViewer
             ):
                 request(arg_request),
                 answer(arg_answer),
-                params(arg_params)
+                emotional_params(arg_params)
+            {}
+            Snapshot(
+                const String& arg_request,
+                const String& arg_answer,
+                const HarmonicGuide::GuideParameter& arg_params
+            ):
+                request(arg_request),
+                answer(arg_answer),
+                guide_params(arg_params)
             {}
             JSON encode() const {
                 JSON result;
                 result[U"request"] = request;
                 result[U"answer"] = answer;
-                result[U"params"] = params.encode();
+                if (emotional_params) {
+                    result[U"emotional_params"] = emotional_params->encode();
+                }
+                if (guide_params) {
+                    result[U"guide_params"] = guide_params->encode();
+                }
                 return result;
             }
             static Snapshot decode(const JSON& json){
                 assert(json[U"request"].isString());
                 assert(json[U"answer"].isString());
-                assert(json[U"params"].isObject());
-                return {
-                    json[U"request"].getString(),
-                    json[U"answer"].getString(),
-                    EmotionalController::EmotionalParameters::decode(json[U"params"])
-                };
+                if (json.hasElement(U"emotional_params")) {
+                    return {
+                        json[U"request"].getString(),
+                        json[U"answer"].getString(),
+                        EmotionalController::EmotionalParameters::decode(json[U"emotional_params"])
+                    };
+                }
+                else if (json.hasElement(U"guide_params")) {
+                    return {
+                        json[U"request"].getString(),
+                        json[U"answer"].getString(),
+                        HarmonicGuide::GuideParameter::decode(json[U"guide_params"])
+                    };
+                }
+                else {
+                    assert(0);
+                }
             }
         };
     private:
@@ -104,7 +131,7 @@ class HistoryViewer
             return snapshots;
         }
 
-        const void reset(){
+        void reset(){
             snapshots.clear();
         }
         

@@ -1,4 +1,8 @@
-App
+App/archive
+App/blackboard
+App/empty.app
+App/engine
+App/example
 icon.icns
 build
 node_modules

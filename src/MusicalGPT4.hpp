@@ -78,7 +78,8 @@ class MusicalGPT4{
             history.clear();
             history.push_back({ U"system", system_prompt });
             for (const auto& snapshot:snapshots){
-                history.push_back({ U"user", construct_prompt(snapshot.request, snapshot.params) });
+                //#FIXME emotionalとguideのどちらの場合にも対応すること
+                history.push_back({ U"user", construct_prompt(snapshot.request, *snapshot.emotional_params) });
                 history.push_back({ U"assistant", snapshot.answer });
             }
             

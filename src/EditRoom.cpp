@@ -13,7 +13,7 @@ void EditRoom::set_rect(const Rect& rect){
                 input_textbox_area = input_layout.to(0.7).stretched(-10);
                 input_button_area  = input_layout.to(1.0).stretched(-10);
             }
-            emotional_controll_area = window_music_layout.to(0.95).stretched(-10);
+            quantitative_controll_area = window_music_layout.to(0.95).stretched(-10);
             page_flipper_area       = window_music_layout.to(1.0).stretched(-10);
         }
         {
@@ -31,7 +31,8 @@ void EditRoom::update(){
     player.update();
     musicalGPT4.update();
     composed_viewer.update(player, not user_request_text_state.active);
-    emotional_controller.update();
+    if (mode == Mode::EmotionalController)  { emotional_controller.update(); }
+    else if (mode == Mode::HarmonicGuide)   { harmonic_guide.update(); }
     history.update();
     
 
@@ -79,9 +80,10 @@ void EditRoom::render(){
     if (menu_area.mouseOver()) {RoundRect{menu_area, 5}.draw(ColorF{0.6, 0.5});}
     // 描画
     RoundRect{composed_area.stretched(5), 5}.drawFrame(2, ColorF{0.3});
-    RoundRect{emotional_controll_area.stretched(5), 5}.drawFrame(2, ColorF{0.3});
+    RoundRect{quantitative_controll_area.stretched(5), 5}.drawFrame(2, ColorF{0.3});
     composed_viewer.render(player);
-    emotional_controller.render();
+    if (mode == Mode::EmotionalController)  { emotional_controller.render(); }
+    else if (mode == Mode::HarmonicGuide)   { harmonic_guide.render(); }
     history.render();
 
     if (musicalGPT4.is_downloading()){
@@ -95,9 +97,14 @@ void EditRoom::reset(){
     player = Composed{};
     composed_viewer = ComposedViewer{};
     emotional_controller = EmotionalController{};
+    harmonic_guide = HarmonicGuide{};
     history = HistoryViewer{};
     composed_viewer.set_renderer_area(composed_area);
-    emotional_controller.set_render_area(emotional_controll_area);
+    if (mode == Mode::EmotionalController) {
+        emotional_controller.set_render_area(quantitative_controll_area);
+    } else if (mode == Mode::HarmonicGuide) {
+        harmonic_guide.set_render_area(quantitative_controll_area);
+    }
     history.set_render_area(page_flipper_area);
     user_request_text_state = TextAreaEditState{U""};
     GPT_answer_text_state   = TextAreaEditState{U""};

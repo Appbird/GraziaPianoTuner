@@ -106,8 +106,8 @@ Optional<EmotionalController::EmotionalParameters> extract_axis_parameters_from_
         axis_values.push_back(std::strtod(match[2].str().c_str(), NULL));
         
     }
-    for (const auto axis_name: axis_names) { Console << axis_name; }
-    for (const auto axis_value: axis_values) { Console << axis_value; }
+    for (const auto& axis_name: axis_names) { Console << axis_name; }
+    for (const auto& axis_value: axis_values) { Console << axis_value; }
     if (axis_names.size() < 2) { return none; }
     assert(axis_names.size() == axis_values.size());
     
