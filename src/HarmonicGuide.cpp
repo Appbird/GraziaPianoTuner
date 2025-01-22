@@ -4,30 +4,111 @@
 
 void HarmonicGuide::set_render_area(const Rect& render_area){
     display_rect    = render_area;
+
+    Rect panel_table = display_rect.stretched(-5);
+    {
+        RectSlicer slicer{panel_table, RectSlicer::X_axis};
+        slicer.from(0.03);
+        sequence_panel = slicer.to(0.7).stretched(-5);
+        semantic_panel = slicer.to(0.97).stretched(-5);
+    }
+    {
+        RectSlicer slicer{sequence_panel, RectSlicer::Y_axis};
+        top_limitzone      = slicer.to(0.15); 
+        middlezone         = slicer.to(0.85);
+        bottom_limitzone   = slicer.to(1.0);
+    }
 }
 void HarmonicGuide::update(){
     // #TODO 実装
 }
 
-void HarmonicGuide::render(){
-    const HSV background_color  {180, 0.05, 0.1};
-    const HSV axis_color        {180, 0.5, 1, 0.5};
-    const HSV basepoint_color   {180, 0.2, 0.4};
-    const HSV point_color       {180, (active) ? 0.6 : 0, (active) ? 1 : 0.5};
-    const SizeF axis_arrow_head {20.0, 20.0};
+double HarmonicGuide::bar_separator_x(int32_t bar) const {
+    return double(sequence_panel.w) * bar / count_of_bars + sequence_panel.tl().x;
+};
 
-    Rect panel_table = display_rect.stretched(-5);
-    RectSlicer slicer{panel_table, RectSlicer::X_axis};
-    Rect sequence_panel = slicer.from(0.05).to(0.7).stretched(-5);
-    Rect semantic_panel = slicer.from(0.7).to(0.95).stretched(-5);
-    RoundRect{sequence_panel, 5}
-        .draw(background_color)
-        .drawFrame(1, axis_color);
-        
+void HarmonicGuide::render(){
+    draw_background();
+    draw_bar_separators();
+    
+    // axis
+    sequence_panel.left().drawArrow(5.0, {10.0, 10.0}, axis_color);
+    bottom_limitzone.top().drawArrow(5.0, {10.0, 10.0}, axis_color);
+
+    // 点の系列
+    plot_sequence();            
+
     RoundRect{semantic_panel, 5}
-        .draw(background_color)
-        .drawFrame(1, axis_color);
+        .draw(panel_background_color)
+        .drawFrame(1, axis_color);    
 }
+
+void HarmonicGuide::draw_background() const {
+    RoundRect{sequence_panel, 5}.draw(panel_background_color);
+    top_limitzone.draw(limitzone_color);
+    bottom_limitzone.draw(limitzone_color);
+    RoundRect{sequence_panel, 5}.drawFrame(5, separator_color);
+}
+
+void HarmonicGuide::draw_bar_separators() const {
+    for (int32_t bar = 0; bar < count_of_bars; bar += control_unit_length) {
+        RectF control_unit = RectF::FromPoints(
+            Vec2{bar_separator_x(bar), sequence_panel.topY()},
+            Vec2{bar_separator_x(bar + control_unit_length), sequence_panel.bottomY()}
+        );
+        control_unit.right().draw(2, separator_color);
+        guide_font(U" {}"_fmt(bar)).draw(
+            16, Arg::bottomLeft = Vec2{control_unit.leftX(), middlezone.bottomY()},
+            axis_color
+        );
+    }
+}
+double HarmonicGuide::plotted_point_y(double intensity) const {
+    intensity = Clamp(intensity, -1.0, 2.0);
+    if (intensity < 0.0) {
+        return std::lerp(bottom_limitzone.bottomY(), bottom_limitzone.topY(), intensity + 1.0);
+    }
+    else if (intensity < 1.0) {
+        return std::lerp(middlezone.bottomY(), middlezone.topY(), intensity);
+    }
+    else {
+        return std::lerp(top_limitzone.bottomY(), top_limitzone.topY(), intensity - 1.0);
+    }
+}
+Color HarmonicGuide::plotted_point_color(double intensity) const {
+    intensity = Clamp(intensity, -1.0, 2.0);
+    if (intensity < 0.0) {
+        return Color{overlimit_point_color}.lerp(control_point_color, intensity + 1.0);
+    }
+    else if (intensity < 1.0) {
+        return control_point_color;
+    }
+    else {
+        return Color{control_point_color}.lerp(overlimit_point_color, intensity - 1.0);
+    }
+}
+
+void HarmonicGuide::plot_sequence() const {
+    Vec2 previous;
+    int32_t i = 0;
+    for (int32_t bar = control_unit_length/2; bar < count_of_bars; bar += control_unit_length, i++) {
+        const double point_x = bar_separator_x(bar);
+        const double point_y = plotted_point_y(sequence[i]); 
+        Vec2 current = {point_x, point_y};
+        Circle(current, point_inner_radius)
+            .drawFrame(
+                point_outer_radius - point_inner_radius,
+                plotted_point_color(sequence[i])
+            );
+        if (i > 0) {
+            Line line{previous, current};
+            line.stretched(-point_inner_radius)
+                .draw(2.0, plotted_point_color(sequence[i-1]), plotted_point_color(sequence[i]));
+        }
+        previous = current;
+    }
+}
+
 void HarmonicGuide::set_state(bool active) {
     this->active = active;
 }
@@ -87,7 +168,7 @@ String HarmonicGuide::Snapshot::describe() const {
     String under_header = U"|---|";
     String param_seq = U"| {} |"_fmt(axis_name);
     for (const auto [idx, value]: Indexed(sequence)){
-        const int32_t bar_start = control_unit_length*idx + 1;
+        const int32_t bar_start = control_unit_length*int32_t(idx) + 1;
         const int32_t bar_end   = bar_start + control_unit_length - 1;
         header_line     += U" bar {} - {} |"_fmt(bar_start, bar_end);
         under_header    += U"---|";
