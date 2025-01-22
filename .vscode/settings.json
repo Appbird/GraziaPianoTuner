@@ -91,6 +91,8 @@
         "shared_mutex": "cpp",
         "typeindex": "cpp",
         "text_encoding": "cpp",
-        "forward_list": "cpp"
+        "forward_list": "cpp",
+        "print": "cpp",
+        "queue": "cpp"
     }
 }

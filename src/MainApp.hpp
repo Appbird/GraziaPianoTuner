@@ -1,51 +1,8 @@
 #pragma once
-#include <Siv3D.hpp>
-#include "RichButton.hpp"
-#include "EditRoom.hpp"
+# include <Siv3D.hpp>
 
-class SideMenuButtons {
-    public:
-    HashTable<String, RichButton> buttons;
-    SideMenuButtons() {}
-    SideMenuButtons(const Rect& menu_rect) {
-        constexpr HSV credits_color{0, 0.4, 0.7};
-        constexpr HSV folder_op_color{30, 0.5, 0.8};
-        constexpr HSV qr_color{60, 0.4, 0.7};
-        constexpr HSV example_color{90, 0.4, 0.7};
-        //ボタン
-        buttons = {
-            {U"credits",    {U"\U000F0189", U"クレジット", Rect{}, true, credits_color}},
-            {U"save",       {U"\U000F0193", U"保存", Rect{}, false, folder_op_color}},
-            {U"load",       {U"\U000F024B", U"ロード", Rect{}, true, folder_op_color}},
-            {U"reset",      {U"\U000F0A7A", U"リセット", Rect{}, true, folder_op_color}},
-            {U"qr",         {U"\U000F0432", U"QRコード", Rect{}, false, qr_color}},
-            {U"ex1",        {U"\U000F0387", U"Bright Sun", Rect{}, true, example_color}},
-            {U"ex2",        {U"\U000F0387", U"Cafe Serenity", Rect{}, true, example_color}},
-            {U"ex3",        {U"\U000F0387", U"Bright Daybreak", Rect{}, true, example_color}}
-        };
-        Array<String> order {
-            U"credits",
-            U"save",
-            U"load",
-            U"reset",
-            U"qr",
-            U"ex1",
-            U"ex2",
-            U"ex3"
-        };
-        RectSlicer layout_for_buttons{menu_rect, RectSlicer::Y_axis};
-        {
-            for (int i = 0; i < buttons.size(); i++){
-                const Rect rect = layout_for_buttons.to((i+1) / 10.0).stretched(-5);
-                buttons[order[i]].set_rect(rect);
-            }
-        }
-    }
-    RichButton& ref(const String& button_id) {
-        assert(buttons.contains(button_id));
-        return buttons.at(button_id);
-    }  
-};
+# include "EditRoom.hpp"
+# include "SideMenuButtons.hpp"
 
 class MainApp {
     enum ApplicationMode{
@@ -153,12 +110,12 @@ private:
             mode = button_qr.selected ? QR_code : Edit;
             if (button_qr.selected){ prepare_QR(); }
         }
-        if (button_save.leftReleased()){ save_score(); }
-        if (button_load.leftReleased()){ load_score_from_dir(); }
-        if (button_reset.leftReleased()) { reset_history(); }
-        if (button_ex1.leftReleased()){ load_score(U"archive/brightsun.json"); }
-        if (button_ex2.leftReleased()){ load_score(U"archive/cafe_serenity.json"); }
-        if (button_ex3.leftReleased()){ load_score(U"archive/bright_daybreak.json"); }
+        if (button_save.leftReleased())     { save_score(); }
+        if (button_load.leftReleased())     { load_score_from_dir(); }
+        if (button_reset.leftReleased())    { reset_history(); }
+        if (button_ex1.leftReleased())      { load_score(U"archive/brightsun.json"); }
+        if (button_ex2.leftReleased())      { load_score(U"archive/cafe_serenity.json"); }
+        if (button_ex3.leftReleased())      { load_score(U"archive/bright_daybreak.json"); }
     }
 
     void prepare_QR() {
@@ -167,18 +124,14 @@ private:
             qr_code_works.fill(QR::MakeImage(qr).scaled(500, 500, InterpolationAlgorithm::Nearest));
         }
     }
-    void load_score(const FilePath& fp) {
-        edit_room.history.load_json(fp);
-        edit_room.musicalGPT4.remember_from_snapshots(edit_room.history.see_snapshots());
-    }
+    void load_score(const FilePath& fp) { edit_room.load_history(fp); }
     void load_score_from_dir() {
         Optional<FilePath> path = Dialog::OpenFile({ FileFilter::JSON() }, U"archive");
         if (path){ load_score(*path); }
     }
     void save_score() {
-        const String title = edit_room.player.get_title();
-        edit_room.history.save(title, edit_room.starting_time_session);
-        System::MessageBoxOK(U"{}が保存されました。"_fmt(title));
+        edit_room.save_history();
+        System::MessageBoxOK(U"作業履歴が保存されました。");
     }
     void reset_history() {
         const MessageBoxResult result = System::MessageBoxOKCancel(U"ここまでの作業履歴を全てリセットします。こうかいしませんね？");
@@ -197,12 +150,14 @@ private:
         FontAsset(U"default")(U"# QRコード").draw(48, Arg::topLeft = message_header_area.pos,  ColorF{0.2});
         if (qr_code_works){
             FontAsset(U"default")
-                (U"ABC記譜法で記されたプレーンテキストの楽譜を保存できます。\nABCJS quick editor(https://editor.drawthedots.com)などで再生可能")
-                .draw(20, Arg::topLeft= message_contents_area.pos, ColorF{0.2});
+                (
+                    U"ABC記譜法で記されたプレーンテキストの楽譜を保存できます。\n"
+                    "ABCJS quick editor(https://editor.drawthedots.com)などで再生可能"
+                ).draw(20, Arg::topLeft= message_contents_area.pos, ColorF{0.2});
             
             qr_code_works.scaled(
-                message_contents_area.w /500.0 / 2,
-                message_contents_area.w /500.0 / 2
+                message_contents_area.w / 500.0 / 2,
+                message_contents_area.w / 500.0 / 2
             ).draw(Arg::center = message_contents_area.center());
         } else {
             FontAsset(U"default")(U"楽曲をQRコードに変換できませんでした。").draw(20, Arg::topCenter = message_contents_area.center(), ColorF{0.2});

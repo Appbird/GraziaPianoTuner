@@ -3,6 +3,7 @@
 # include "util.hpp"
 # include "HistoryViewer.hpp"
 # include "Composed.hpp"
+# include "Interface/PanelComponents.hpp"
 
 class EmotionalController;
 
@@ -19,8 +20,8 @@ class MusicalGPT4{
         Array<std::pair<String, String>> history;
         AsyncHTTPTask task_for_composing;
         AsyncHTTPTask task_for_translating;
-        String construct_prompt(const String& user_request, const EmotionalController& emotional_controller);
-        String construct_prompt(const String& user_request, const EmotionalController::EmotionalParameters& emotional_controller);
+        //#DONE 多様性
+        String construct_prompt(const String& user_request, const String& params_description);
         bool is_ready();
         String get_answer();
         
@@ -33,14 +34,14 @@ class MusicalGPT4{
             TextReader sysprpt_revise{U"../src/system_prompt_for_translate.txt"};
             system_prompt = sysprpt.readAll();
             system_prompt_tlanslate = sysprpt_revise.readAll();
-            history.push_back({U"user", system_prompt});
+            history.push_back({U"developer", system_prompt});
         }
         
         /** LLMにuser_request, emotional_controllerの内容に基づいて、楽曲を新たに記述するようリクエストする。
          * 出力の受け取りは非同期で行う必要がある。try_to_get_answer()を定期的に呼び出して、LLMからの応答が返ってきているかをチェックする必要がある。
          * TODO: これをstd::futureを使って書き換える。
          */
-        void request(const String& user_requset, const EmotionalController& emotional_controller);
+        void request(const String& user_requset, const String& params_description);
         /** @brief request関数でリクエストをLLMに送った後、返答があった場合は、対話履歴にその返答を加えながら返す。返答がなかった場合はnoneを返す。 */
         Optional<String> try_to_get_answer(){
             if (is_ready()) {
@@ -51,6 +52,13 @@ class MusicalGPT4{
             } else {
                 return none;
             }
+        }
+        /** この関数を呼ぶ前に、ユーザ入力が履歴に一つ以上存在することを要求する。 */
+        String last_user_input() {
+            for (int32_t i = history.size() - 1; i >= 0; i--) {
+                if (history[i].first == U"user") { return history[i].second; }
+            }
+            assert(0);
         }
         Optional<String> try_to_get_japanese_answer(){
             if (is_ready()) {
@@ -68,6 +76,7 @@ class MusicalGPT4{
         HTTPProgress progress(){
             return task_for_composing.getProgress();
         }
+        
         void dump_answer() const{
             INFO("\n===================\n\tDUMP GPT4 CONVERSATION HISTORY\t\n===================\n");
             for (const auto& snapshot:history){
@@ -76,11 +85,11 @@ class MusicalGPT4{
         }
         void remember_from_snapshots(const Array<HistoryViewer::Snapshot>& snapshots){
             history.clear();
-            history.push_back({ U"system", system_prompt });
+            history.push_back({ U"developer", system_prompt });
             for (const auto& snapshot:snapshots){
-                //#FIXME emotionalとguideのどちらの場合にも対応すること
-                history.push_back({ U"user", construct_prompt(snapshot.request, *snapshot.emotional_params) });
-                history.push_back({ U"assistant", snapshot.answer });
+                //#DONE emotionalとguideのどちらの場合にも対応すること
+                history.push_back({ U"user", snapshot.user_to_LLM });
+                history.push_back({ U"assistant", snapshot.answer_from_LLM });
             }
             
         }
@@ -92,7 +101,7 @@ class MusicalGPT4{
                 snap(base_answer);
                 task_for_translating = OpenAI::Chat::CompleteAsync(GPT_API_KEY, 
                     {
-                        { U"system", system_prompt_tlanslate },
+                        { U"developer", system_prompt_tlanslate },
                         { U"user", base_answer }
                     }
                 , model);

@@ -59,7 +59,7 @@ class RectSlicer{
             return {slice(at, next_axis), slice(1.0, next_axis)};
         }
         RectSlicer& from(const double from){
-            assert(start < from);
+            assert(start <= from);
             start = from;
             return *this;
         }

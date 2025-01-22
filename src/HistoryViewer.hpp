@@ -2,69 +2,61 @@
 # include <Siv3D.hpp>
 # include "Composed.hpp"
 # include "Layout.hpp"
-# include "EmotionalController.hpp"
-# include "HarmonicGuide.hpp"
+#include "util.h"
 
 class HistoryViewer
 {
     public:
         struct Snapshot{
             String request;
-            String answer;
-            Optional<EmotionalController::EmotionalParameters> emotional_params;
-            Optional<HarmonicGuide::GuideParameter> guide_params;
+            String user_to_LLM;
+            String answer_from_LLM;
+            ParameterControllMode params_type;
+            JSON params;
+
             Snapshot(){}
             Snapshot(
                 const String& arg_request,
+                const String& arg_user,
                 const String& arg_answer,
-                const EmotionalController::EmotionalParameters& arg_params
+                ParameterControllMode params_type,
+                const JSON& parameter_panel_snapshot
             ):
                 request(arg_request),
-                answer(arg_answer),
-                emotional_params(arg_params)
-            {}
-            Snapshot(
-                const String& arg_request,
-                const String& arg_answer,
-                const HarmonicGuide::GuideParameter& arg_params
-            ):
-                request(arg_request),
-                answer(arg_answer),
-                guide_params(arg_params)
+                user_to_LLM(arg_user),
+                answer_from_LLM(arg_answer),
+                params_type(params_type),
+                params(parameter_panel_snapshot)
             {}
             JSON encode() const {
                 JSON result;
-                result[U"request"] = request;
-                result[U"answer"] = answer;
-                if (emotional_params) {
-                    result[U"emotional_params"] = emotional_params->encode();
-                }
-                if (guide_params) {
-                    result[U"guide_params"] = guide_params->encode();
-                }
+                Field2JSON(result, request);
+                Field2JSON(result, user_to_LLM);
+                Field2JSON(result, answer_from_LLM);
+                Field2JSON(result, params);
+                result[U"params_type"] = ToString(params_type);
+                // #DONE 多様性
+                // | params.name基準で分類するようにしたい
                 return result;
             }
             static Snapshot decode(const JSON& json){
                 assert(json[U"request"].isString());
-                assert(json[U"answer"].isString());
-                if (json.hasElement(U"emotional_params")) {
-                    return {
-                        json[U"request"].getString(),
-                        json[U"answer"].getString(),
-                        EmotionalController::EmotionalParameters::decode(json[U"emotional_params"])
-                    };
-                }
-                else if (json.hasElement(U"guide_params")) {
-                    return {
-                        json[U"request"].getString(),
-                        json[U"answer"].getString(),
-                        HarmonicGuide::GuideParameter::decode(json[U"guide_params"])
-                    };
-                }
-                else {
-                    assert(0);
-                }
+                assert(json[U"user_to_LLM"].isString());
+                assert(json[U"answer_from_LLM"].isString());
+                assert(json[U"params_type"].isString());
+                //#DONE 多様性
+                // | ここで分岐発生するのなんかやだな（分岐が発生するのに、のちの工程でエラーが発生する可能性が抑制されていない）
+                // | JSONで持たせるか？
+                assert(json[U"params"].isString());
+                return {
+                    json[U"request"].getString(),
+                    json[U"user_to_LLM"].getString(),
+                    json[U"answer_from_LLM"].getString(),
+                    ToEnumParameterControllMode(json[U"params_type"].getString()),
+                    json[U"params"]
+                };
             }
+            
         };
     private:
         Rect render_area;

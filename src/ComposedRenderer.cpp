@@ -54,7 +54,10 @@ void ComposedViewer::render_beat() const{
             notes_area.tl() + offset,
             notes_area.bl() + offset
         }.draw(thickness, HSV{0, 0, color_value});
-        if (b % 4 == 0) { font_for_chord(Format(b)).draw(height_per_pitch(), notes_area.tl() + offset, ColorF{0.6}); }
+        if (b % 4 == 0) {
+            font_for_chord(ToString(b));
+            font_for_chord(ToString(b)).draw(height_per_pitch(), notes_area.tl() + offset, ColorF{0.6});
+        }
         
     }
 }
@@ -108,8 +111,8 @@ void ComposedViewer::render_notes(
                                 HSV{200, 0.2,  0.4};
 
         note_rect(*noteiter)
-        .drawFrame(2.0, HSV{main_color.h, main_color.s, 0.5})
-        .draw(note_color);
+            .drawFrame(2.0, HSV{main_color.h, main_color.s, 0.5})
+            .draw(note_color);
     }
 }
 
@@ -160,7 +163,6 @@ void ComposedViewer::render(const Composed& composed) const {
     const auto [occur_begin, occur_end] = composed.get_passing_notes();
     const Music& music                  = composed.get_music();
     const double current_beat           = composed.get_current_beat();
-
     // InRangeを使うとなぜか型エラーが起こる。
     assert(music.get_notes().begin() <= occur_begin and occur_begin <= music.get_notes().end());
     assert(music.get_notes().begin() <= occur_end   and occur_end <= music.get_notes().end());
@@ -173,7 +175,6 @@ void ComposedViewer::render(const Composed& composed) const {
         render_pitch();
         render_beat();
     }
-
     if (music)
     {
         render_meta_information(music);
@@ -200,13 +201,14 @@ void ComposedViewer::render(const Composed& composed) const {
 
 void ComposedViewer::update(Composed& composed, bool stopper_enabled)
 {
+    
     if (not composed.get_music()){ return; }
     const double max_beat               = composed.get_music().get_music_length_in_beat();
     const auto  [min_pitch, max_pitch]  = composed.get_music().get_min_max_pitch();
     const double current_beat           = composed.get_current_beat();
 
     if (is_autoscrolling) {update_autoscrool(current_beat); }
-    
+
     update_scroll();
     const double bottom_pitch = (min_pitch >= n_halfpitch_in_area) ? min_pitch - n_halfpitch_in_area : 0;
     earliest_beat   = Clamp(earliest_beat,  0.0, max_beat - n_beats_in_area);

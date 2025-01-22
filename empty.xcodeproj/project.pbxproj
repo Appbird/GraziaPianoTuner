@@ -53,6 +53,7 @@
 		9356BC002A96525800F494F6 /* Binasc.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9356BBFA2A96525800F494F6 /* Binasc.cpp */; };
 		9356BC012A96525800F494F6 /* MidiEvent.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9356BBFB2A96525800F494F6 /* MidiEvent.cpp */; };
 		9356BC022A96525800F494F6 /* MidiEventList.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9356BBFC2A96525800F494F6 /* MidiEventList.cpp */; };
+		937DF55A2D40CEEB002BBAA6 /* HarmonicGuide.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 937DF5592D40CEEB002BBAA6 /* HarmonicGuide.cpp */; };
 		93C8B0142A9E012200D80CA7 /* EmotionalController.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 93C8B0132A9E012200D80CA7 /* EmotionalController.cpp */; };
 		93DC94C82A9E6FE2000564F3 /* HistoryViewer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 93DC94C62A9E6FE2000564F3 /* HistoryViewer.cpp */; };
 		93DC94C92A9E6FE2000564F3 /* EditRoom.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 93DC94C72A9E6FE2000564F3 /* EditRoom.cpp */; };
@@ -108,6 +109,7 @@
 		9356BBFA2A96525800F494F6 /* Binasc.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = Binasc.cpp; path = src/midifile/Binasc.cpp; sourceTree = "<group>"; };
 		9356BBFB2A96525800F494F6 /* MidiEvent.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = MidiEvent.cpp; path = src/midifile/MidiEvent.cpp; sourceTree = "<group>"; };
 		9356BBFC2A96525800F494F6 /* MidiEventList.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = MidiEventList.cpp; path = src/midifile/MidiEventList.cpp; sourceTree = "<group>"; };
+		937DF5592D40CEEB002BBAA6 /* HarmonicGuide.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = HarmonicGuide.cpp; path = src/HarmonicGuide.cpp; sourceTree = "<group>"; };
 		93C8B0132A9E012200D80CA7 /* EmotionalController.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = EmotionalController.cpp; path = src/EmotionalController.cpp; sourceTree = "<group>"; };
 		93DC94C62A9E6FE2000564F3 /* HistoryViewer.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = HistoryViewer.cpp; path = src/HistoryViewer.cpp; sourceTree = "<group>"; };
 		93DC94C72A9E6FE2000564F3 /* EditRoom.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = EditRoom.cpp; path = src/EditRoom.cpp; sourceTree = "<group>"; };
@@ -154,6 +156,7 @@
 		2C1778791CE0A9D800BB8AD0 = {
 			isa = PBXGroup;
 			children = (
+				937DF5592D40CEEB002BBAA6 /* HarmonicGuide.cpp */,
 				934204C02A9FC40400E40348 /* util.cpp */,
 				93DC94C72A9E6FE2000564F3 /* EditRoom.cpp */,
 				93DC94C62A9E6FE2000564F3 /* HistoryViewer.cpp */,
@@ -303,6 +306,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				937DF55A2D40CEEB002BBAA6 /* HarmonicGuide.cpp in Sources */,
 				934204C12A9FC40400E40348 /* util.cpp in Sources */,
 				93DC94C82A9E6FE2000564F3 /* HistoryViewer.cpp in Sources */,
 				93DC94C92A9E6FE2000564F3 /* EditRoom.cpp in Sources */,

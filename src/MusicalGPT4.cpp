@@ -2,30 +2,20 @@
 # include "util.hpp"
 # include "EmotionalController.hpp"
 
-String MusicalGPT4::construct_prompt(const String& user_request, const EmotionalController& emotional_controller){
-    return
-        U"# INPUT\n"
-        + user_request
-        + emotional_controller.describe();
-}
-String MusicalGPT4::construct_prompt(const String& user_request, const EmotionalController::EmotionalParameters& params){
+String MusicalGPT4::construct_prompt(const String& user_request, const String& params_description){
     return 
-        U"# INPUT\n"
-        + user_request
-        + params.describe();
+        U"# INPUT\n{}\n{}"_fmt(user_request, params_description);
 }
 
-void MusicalGPT4::request(const String& user_requset, const EmotionalController& emotional_controller)
-{
+void MusicalGPT4::request(const String& user_requset, const String& params_description) {
     Console << U"[INFO] Start Request.";
     if (history.size() == 1){
-        history[0].second += U"\n\n" + construct_prompt(user_requset, emotional_controller);
+        history[0].second += U"\n\n" + construct_prompt(user_requset, params_description);
     } else {
-        history.push_back({U"user", construct_prompt(user_requset, emotional_controller)});
+        history.push_back({U"user", construct_prompt(user_requset, params_description)});
     }
     
-    if (not debug)
-    {
+    if (not debug) {
         task_for_composing = OpenAI::Chat::CompleteAsync(GPT_API_KEY, history, model);
         task_for_translating = AsyncHTTPTask{};
     }

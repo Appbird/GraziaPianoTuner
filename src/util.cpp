@@ -26,3 +26,15 @@ String find_last_axis_block(const String& GPT_answer)
 {
     return find_last_block(GPT_answer, "axis");
 }
+
+String ToString(ParameterControllMode mode) {
+    switch(mode) {
+        case ParameterControllMode::EmotionalController: return U"EmotionalController";
+        case ParameterControllMode::HarmonicGuide: return U"HarmonicGuide";
+    }
+}
+ParameterControllMode ToEnumParameterControllMode(const String& str) {
+    if (str == U"EmotionalController")  { return ParameterControllMode::EmotionalController; }
+    if (str == U"HarmonicGuide")        { return ParameterControllMode::HarmonicGuide; }
+    assert(0);
+}

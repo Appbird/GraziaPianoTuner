@@ -82,46 +82,63 @@ void EmotionalController::render(){
     
 }
 
+Point EmotionalController::display_point(){
+    return (emotional_point * Vec2{1, -1} * display_panel.size / 2 + display_panel.center()).asPoint();
+}
+void EmotionalController::set_emotional_point(const Point& touched_point){
+    emotional_point = (Vec2(touched_point - display_panel.center()) / (display_panel.size / 2)) * Vec2{1, -1};
+    emotional_point.x = Clamp(emotional_point.x, -1.0, 1.0);
+    emotional_point.y = Clamp(emotional_point.y, -1.0, 1.0);
+}
 
-Optional<EmotionalController::EmotionalParameters> extract_axis_parameters_from_prompt(const String& GPT_answer) {
-    const String axis_part = find_last_axis_block(GPT_answer);
-    if (axis_part == U"") { return none; }
-    Console << axis_part;
-    const std::regex regex{R"(([^:]+?)\s*:\s*([+-]?[0-9.]+)\s*)"};
-
-    std::string str_utf8 = axis_part.toUTF8();
-    std::string::const_iterator text_iter = str_utf8.cbegin();
-
-    std::vector<String> axis_names;
-    std::vector<double> axis_values;
-
-    for (
-        std::sregex_iterator it(str_utf8.begin(), str_utf8.end(), regex);
-        it != std::sregex_iterator();
-        ++it
-    ) {
-        const std::smatch match = *it;
-        assert(match.size() >= 3);
-        axis_names.push_back(Unicode::FromUTF8(match[1].str()));
-        axis_values.push_back(std::strtod(match[2].str().c_str(), NULL));
-        
-    }
-    for (const auto& axis_name: axis_names) { Console << axis_name; }
-    for (const auto& axis_value: axis_values) { Console << axis_value; }
-    if (axis_names.size() < 2) { return none; }
-    assert(axis_names.size() == axis_values.size());
-    
-    return EmotionalController::EmotionalParameters{
-        axis_names[0], axis_names[1],
-        Vec2{axis_values[0], axis_values[1]},
-        true
+EmotionalController::Snapshot EmotionalController::snapshot_internal() const{
+    return {
+        x_axis_text_state.text,
+        y_axis_text_state.text,
+        emotional_point,
+        using_param
     };
 }
 
-void EmotionalController::set_answer(const String& answer) {
-    const auto extracted_result = extract_axis_parameters_from_prompt(answer);
-    if (extracted_result) {
-        Console << extracted_result->encode();
-        memento(*extracted_result);
-    }
+
+JSON EmotionalController::Snapshot::encode() const{
+    JSON result;
+    result[U"X_axis"] = X_axis;
+    result[U"Y_axis"] = Y_axis;
+    result[U"Vec2"][U"x"] = emotional_parameters.x;
+    result[U"Vec2"][U"y"] = emotional_parameters.y;
+    result[U"is_used"] = is_used;
+    return result;
 }
+EmotionalController::Snapshot EmotionalController::Snapshot::decode(const JSON& json) {
+    assert(json[U"X_axis"].isString());
+    assert(json[U"Y_axis"].isString());
+    assert(json[U"Vec2"].isObject());
+        assert(json[U"Vec2"][U"x"].isNumber());
+        assert(json[U"Vec2"][U"y"].isNumber());
+    assert(json[U"is_used"].isBool());
+    
+    return {
+        json[U"X_axis"].getString(),
+        json[U"Y_axis"].getString(),
+        Vec2{
+            json[U"Vec2"][U"x"].get<double>(),
+            json[U"Vec2"][U"y"].get<double>()
+        },
+        json[U"is_used"].get<bool>()
+    };
+}
+String EmotionalController::Snapshot::describe() const {
+    String parameters_description = U"\t{}:{: .2f}\n\t{}:{: .2f}\n"_fmt(
+        X_axis,
+        emotional_parameters.x,
+        Y_axis,
+        emotional_parameters.y
+    );
+    return (
+        U"\n# Current Conceptual Parameters\n"
+        "\n"
+    ) + parameters_description;
+}
+
+
