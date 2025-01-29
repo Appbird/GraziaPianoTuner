@@ -18,7 +18,11 @@ Rect dilated(const Rect& area, const int padding);
 Rect clipped(const Rect& area, const RectF& clip);
 Rect cliped_Y(const Rect& area, double top, double down);
 Rect cliped_X(const Rect& area, double right, double left);
-
+Rect labelled_region(
+    const Rect& rect,
+    const DrawableText& axis_name,
+    const HSV& font_color
+);
 
 class RectSlicer{
     public:

@@ -9,18 +9,13 @@ String MusicalGPT4::construct_prompt(const String& user_request, const String& p
 
 void MusicalGPT4::request(const String& user_requset, const String& params_description) {
     Console << U"[INFO] Start Request.";
-    if (history.size() == 1){
-        history[0].second += U"\n\n" + construct_prompt(user_requset, params_description);
-    } else {
-        history.push_back({U"user", construct_prompt(user_requset, params_description)});
-    }
-    
+    history.push_back({U"user", construct_prompt(user_requset, params_description)});
+    snap(construct_prompt(user_requset, params_description));
+
     if (not debug) {
         task_for_composing = OpenAI::Chat::CompleteAsync(GPT_API_KEY, history, model);
         task_for_translating = AsyncHTTPTask{};
-    }
-    else
-    {
+    } else {
         debug_is_ready = true;
     }
     // https://siv3d.github.io/ja-jp/tutorial3/openai/

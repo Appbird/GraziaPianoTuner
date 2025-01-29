@@ -20,24 +20,17 @@ class HarmonicGuide : public ParameterControllerPanel {
 
         // JSONRepresentableState
         JSON snapshot() const override  { return snapshot_internal().encode(); }
-        void memento(const JSON& json) override {
-            Snapshot snapshot = Snapshot::decode(json);
-            assert(snapshot.guide_version == 1);
-            count_of_bars = snapshot.count_of_bars;
-            control_unit_length = snapshot.control_unit_length;
-            sequence = snapshot.sequence;
-            y_axis_text_state.text = snapshot.axis_name;
-        }
+        void memento(const JSON& json) override;
 
     private:
         Array<double> sequence { 0, 1.9, -1.0, 1.7 };
         int32_t count_of_bars = 16;
         int32_t control_unit_length = 4;
-        
+        Optional<int32_t> current_control_unit_index = 0;
     private:
         struct Snapshot;
 
-        HSV axis_color                  {88, 0.68, 0.51};
+        HSV axis_color                  {88, 0.68, 0.80};
         HSV limitzone_color             {126, 0.35, 0.21};
         HSV panel_background_color      {90, 0.25, 0.09};
         HSV font_color                  {0, 0.0, 1.0};
@@ -51,7 +44,7 @@ class HarmonicGuide : public ParameterControllerPanel {
         double lifetime = 0.5;
         bool active = true;
         bool dragging = false;
-        // 軌跡
+        // 軌跡を表示する
         Trail trail{lifetime};
         
         // UIの位置情報
@@ -66,15 +59,16 @@ class HarmonicGuide : public ParameterControllerPanel {
         Font guide_font{24};
 
         double bar_separator_x(int32_t bar) const;
-        double plotted_point_y(double intensity) const;
+        double bar_separator_width() const;
+        double intensity_to_plotted_point_y(double intensity) const;
+        double plotted_point_y_to_intensity(double y) const;
         Color plotted_point_color(double intensity) const;
-
-
-        void draw_background() const;
+        
+        void draw_sequence_panel() const;
         void draw_bar_separators() const;
+        void draw_semantic_panel();
         void plot_sequence() const;
         
-        Point display_point(int32_t index);
         void write_sequence(const Point& touched_point);
         Snapshot snapshot_internal() const;
     private:

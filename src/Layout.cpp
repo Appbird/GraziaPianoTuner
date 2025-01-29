@@ -38,3 +38,14 @@ Rect cliped_X(const Rect& area, double right, double left){
 
     return clipped(area, RectF{right, 0,left - right, 1});
 }
+
+Rect labelled_region(
+    const Rect& rect,
+    const DrawableText& axis_name,
+    const HSV& font_color
+){
+    Rect label_region = cliped_X(rect, 0.0, 0.3);
+    Rect textbox_region = cliped_X(rect, 0.3, 1.0);
+    axis_name.draw(16, Arg::leftCenter = label_region.leftCenter(), font_color);
+    return textbox_region;
+}

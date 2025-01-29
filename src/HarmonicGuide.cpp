@@ -1,6 +1,7 @@
 # include "HarmonicGuide.hpp"
 # include "Layout.hpp"
 # include <regex>
+# include "DebugTools.hpp"
 
 void HarmonicGuide::set_render_area(const Rect& render_area){
     display_rect    = render_area;
@@ -20,34 +21,59 @@ void HarmonicGuide::set_render_area(const Rect& render_area){
     }
 }
 void HarmonicGuide::update(){
-    // #TODO 実装
+    if (sequence_panel.leftPressed() or current_control_unit_index) { write_sequence( Cursor::Pos() ); }
 }
 
 double HarmonicGuide::bar_separator_x(int32_t bar) const {
-    return double(sequence_panel.w) * bar / count_of_bars + sequence_panel.tl().x;
-};
-
-void HarmonicGuide::render(){
-    draw_background();
-    draw_bar_separators();
-    
-    // axis
-    sequence_panel.left().drawArrow(5.0, {10.0, 10.0}, axis_color);
-    bottom_limitzone.top().drawArrow(5.0, {10.0, 10.0}, axis_color);
-
-    // 点の系列
-    plot_sequence();            
-
-    RoundRect{semantic_panel, 5}
-        .draw(panel_background_color)
-        .drawFrame(1, axis_color);    
+    return bar_separator_width() * bar + sequence_panel.tl().x;
 }
 
-void HarmonicGuide::draw_background() const {
+double HarmonicGuide::bar_separator_width() const {
+    return double(sequence_panel.w) / count_of_bars;
+}
+
+void HarmonicGuide::render(){
+    draw_sequence_panel();
+    draw_semantic_panel();
+}
+
+void HarmonicGuide::draw_semantic_panel() {
+    RoundRect{semantic_panel, 5}
+        .draw(panel_background_color)
+        .drawFrame(1, axis_color);
+    {
+
+        RectSlicer slicer{semantic_panel.stretched(-5), RectSlicer::Y_axis};
+        {
+            Rect first_row = slicer.to(0.333);
+            Rect textbox_axis = labelled_region(first_row, guide_font(U"Y axis"), font_color);
+            SimpleGUI::TextBox(y_axis_text_state, textbox_axis.tl(), textbox_axis.w, unspecified, true);
+        }
+        {
+            Rect second_row = slicer.to(0.666);
+            Rect button_target = labelled_region(second_row, guide_font(U"Target"), font_color);
+            SimpleGUI::Button(U"コード進行", button_target.tl(), button_target.w, true);
+        }
+        Rect third_row = slicer.to(1.0);
+        SimpleGUI::Button(U"\U000F0493 モード切り替え", third_row.tl(), third_row.w, true);
+    }
+}
+
+void HarmonicGuide::draw_sequence_panel() const {
     RoundRect{sequence_panel, 5}.draw(panel_background_color);
     top_limitzone.draw(limitzone_color);
     bottom_limitzone.draw(limitzone_color);
     RoundRect{sequence_panel, 5}.drawFrame(5, separator_color);
+    
+    guide_font(U"  y:{}"_fmt(y_axis_text_state.text)).draw(20, Arg::topLeft = top_limitzone.tl(), font_color);
+    guide_font(U"  max").draw(20, Arg::topLeft = middlezone.tl(), axis_color);
+    guide_font(U"  min").draw(20, Arg::bottomLeft = middlezone.bl(), axis_color);
+    guide_font(U"t:小節 ").draw(20, Arg::topRight = bottom_limitzone.tr(), font_color);
+
+    draw_bar_separators();
+    sequence_panel.left().drawArrow(5.0, {10.0, 10.0}, axis_color);
+    bottom_limitzone.top().drawArrow(5.0, {10.0, 10.0}, axis_color);
+    plot_sequence(); 
 }
 
 void HarmonicGuide::draw_bar_separators() const {
@@ -57,33 +83,41 @@ void HarmonicGuide::draw_bar_separators() const {
             Vec2{bar_separator_x(bar + control_unit_length), sequence_panel.bottomY()}
         );
         control_unit.right().draw(2, separator_color);
-        guide_font(U" {}"_fmt(bar)).draw(
-            16, Arg::bottomLeft = Vec2{control_unit.leftX(), middlezone.bottomY()},
+        guide_font(U"{} "_fmt(bar + control_unit_length)).draw(
+            16, Arg::bottomRight = Vec2{control_unit.rightX(), middlezone.bottomY()},
             axis_color
         );
     }
 }
-double HarmonicGuide::plotted_point_y(double intensity) const {
+double HarmonicGuide::intensity_to_plotted_point_y(double intensity) const {
     intensity = Clamp(intensity, -1.0, 2.0);
     if (intensity < 0.0) {
         return std::lerp(bottom_limitzone.bottomY(), bottom_limitzone.topY(), intensity + 1.0);
-    }
-    else if (intensity < 1.0) {
+    } else if (intensity < 1.0) {
         return std::lerp(middlezone.bottomY(), middlezone.topY(), intensity);
-    }
-    else {
+    } else {
         return std::lerp(top_limitzone.bottomY(), top_limitzone.topY(), intensity - 1.0);
     }
 }
+
+double HarmonicGuide::plotted_point_y_to_intensity(double y) const {
+    y = Clamp<double>(y, sequence_panel.topY(), sequence_panel.bottomY());
+    if (y > bottom_limitzone.topY()) {
+        return double(bottom_limitzone.bottomY() - y) / bottom_limitzone.h - 1.0;
+    } else if (y > middlezone.topY()) {
+        return double(middlezone.bottomY() - y) / middlezone.h;
+    } else {
+        return double(top_limitzone.bottomY() - y) / top_limitzone.h + 1.0;
+    }
+}
+
 Color HarmonicGuide::plotted_point_color(double intensity) const {
     intensity = Clamp(intensity, -1.0, 2.0);
     if (intensity < 0.0) {
         return Color{overlimit_point_color}.lerp(control_point_color, intensity + 1.0);
-    }
-    else if (intensity < 1.0) {
+    } else if (intensity < 1.0) {
         return control_point_color;
-    }
-    else {
+    } else {
         return Color{control_point_color}.lerp(overlimit_point_color, intensity - 1.0);
     }
 }
@@ -93,7 +127,7 @@ void HarmonicGuide::plot_sequence() const {
     int32_t i = 0;
     for (int32_t bar = control_unit_length/2; bar < count_of_bars; bar += control_unit_length, i++) {
         const double point_x = bar_separator_x(bar);
-        const double point_y = plotted_point_y(sequence[i]); 
+        const double point_y = intensity_to_plotted_point_y(sequence[i]); 
         Vec2 current = {point_x, point_y};
         Circle(current, point_inner_radius)
             .drawFrame(
@@ -113,13 +147,16 @@ void HarmonicGuide::set_state(bool active) {
     this->active = active;
 }
 
-Point HarmonicGuide::display_point(int32_t index){
-    //#TODO どの位置を触ったかによって、sequenceのどの位置が書き換えられたかを計算する。
-    return {0, 0};
-}
 void HarmonicGuide::write_sequence(const Point& touched_point){
-    //#TODO どの位置を触ったかによって、sequenceのどの位置が書き換えられたかを計算する。
-    return;
+    if (sequence_panel.leftClicked()) {
+        const int32_t bar = int32_t((touched_point.x - sequence_panel.x) / bar_separator_width());
+        current_control_unit_index = bar / control_unit_length;
+    } else if (not MouseL.pressed()) {
+        current_control_unit_index = none;
+    }
+    if (current_control_unit_index and InRange<int32_t>(*current_control_unit_index, 0, sequence.size()-1)) {
+        sequence[*current_control_unit_index] = plotted_point_y_to_intensity(touched_point.y);
+    }
 }
 HarmonicGuide::Snapshot HarmonicGuide::snapshot_internal() const {
     return Snapshot{
@@ -129,6 +166,14 @@ HarmonicGuide::Snapshot HarmonicGuide::snapshot_internal() const {
         y_axis_text_state.text,
         sequence
     };
+}
+void HarmonicGuide::memento(const JSON& json) {
+    Snapshot snapshot = Snapshot::decode(json);
+    assert(snapshot.guide_version == 1);
+    count_of_bars = snapshot.count_of_bars;
+    control_unit_length = snapshot.control_unit_length;
+    sequence = snapshot.sequence;
+    y_axis_text_state.text = snapshot.axis_name;
 }
 
 // ------------------------------------------------------
@@ -162,7 +207,7 @@ HarmonicGuide::Snapshot HarmonicGuide::Snapshot::decode(const JSON& json){
     return param;
 }
 String HarmonicGuide::Snapshot::describe() const {
-    String title = U"# Conceptual Parameters";
+    String title = U"# Current Customizable Semantic Parameters";
     
     String header_line = U"| Parameter name |";
     String under_header = U"|---|";
@@ -170,9 +215,9 @@ String HarmonicGuide::Snapshot::describe() const {
     for (const auto [idx, value]: Indexed(sequence)){
         const int32_t bar_start = control_unit_length*int32_t(idx) + 1;
         const int32_t bar_end   = bar_start + control_unit_length - 1;
-        header_line     += U" bar {} - {} |"_fmt(bar_start, bar_end);
+        header_line     += U" {} - {} 小節 |"_fmt(bar_start, bar_end);
         under_header    += U"---|";
-        param_seq       += U" {} |"_fmt(value);
+        param_seq       += U" {:.2f} |"_fmt(value);
     }
     String result = title   + U"\n\n";
     result += header_line   + U"\n";

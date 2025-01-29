@@ -15,11 +15,9 @@ class MusicalGPT4{
         String system_prompt;
         String system_prompt_tlanslate;
         bool debug = false;
-            bool debug_is_ready = false;
             int debug_count = 0;
         Array<std::pair<String, String>> history;
         AsyncHTTPTask task_for_composing;
-        AsyncHTTPTask task_for_translating;
         //#DONE 多様性
         String construct_prompt(const String& user_request, const String& params_description);
         bool is_ready();
@@ -31,7 +29,6 @@ class MusicalGPT4{
             GPT_API_KEY(arg_GPT_API_KEY)
         {
             TextReader sysprpt{U"../src/system_prompt1.txt"};
-            TextReader sysprpt_revise{U"../src/system_prompt_for_translate.txt"};
             system_prompt = sysprpt.readAll();
             system_prompt_tlanslate = sysprpt_revise.readAll();
             history.push_back({U"developer", system_prompt});
@@ -56,9 +53,10 @@ class MusicalGPT4{
         /** この関数を呼ぶ前に、ユーザ入力が履歴に一つ以上存在することを要求する。 */
         String last_user_input() {
             for (int32_t i = history.size() - 1; i >= 0; i--) {
+                snap(history[i].first);
                 if (history[i].first == U"user") { return history[i].second; }
             }
-            assert(0);
+            exit(1);
         }
         Optional<String> try_to_get_japanese_answer(){
             if (is_ready()) {

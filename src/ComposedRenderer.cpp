@@ -55,8 +55,7 @@ void ComposedViewer::render_beat() const{
             notes_area.bl() + offset
         }.draw(thickness, HSV{0, 0, color_value});
         if (b % 4 == 0) {
-            font_for_chord(ToString(b));
-            font_for_chord(ToString(b)).draw(height_per_pitch(), notes_area.tl() + offset, ColorF{0.6});
+            font_for_chord(ToString(b/4+1)).draw(height_per_pitch(), notes_area.tl() + offset, ColorF{0.6});
         }
         
     }
