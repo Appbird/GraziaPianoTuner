@@ -28,6 +28,9 @@ double HarmonicGuide::bar_separator_x(int32_t bar) const {
     return bar_separator_width() * bar + sequence_panel.tl().x;
 }
 
+double HarmonicGuide::bar_separator_x(double bar) const {
+    return bar_separator_width() * bar + sequence_panel.tl().x;
+}
 double HarmonicGuide::bar_separator_width() const {
     return double(sequence_panel.w) / count_of_bars;
 }
@@ -50,9 +53,9 @@ void HarmonicGuide::draw_semantic_panel() {
             SimpleGUI::TextBox(y_axis_text_state, textbox_axis.tl(), textbox_axis.w, unspecified, true);
         }
         {
-            Rect second_row = slicer.to(0.666);
-            Rect button_target = labelled_region(second_row, guide_font(U"Target"), font_color);
-            SimpleGUI::Button(U"コード進行", button_target.tl(), button_target.w, true);
+            //Rect second_row = slicer.to(0.666);
+            //Rect button_target = labelled_region(second_row, guide_font(U"Target"), font_color);
+            //SimpleGUI::Button(U"コード進行", button_target.tl(), button_target.w, true);
         }
         Rect third_row = slicer.to(1.0);
         SimpleGUI::Button(U"\U000F0493 モード切り替え", third_row.tl(), third_row.w, true);
@@ -64,12 +67,16 @@ void HarmonicGuide::draw_sequence_panel() const {
     top_limitzone.draw(limitzone_color);
     bottom_limitzone.draw(limitzone_color);
     RoundRect{sequence_panel, 5}.drawFrame(5, separator_color);
-    
+    const double left_bar_x     = bar_separator_x(left_bar);
+    const double right_bar_x    = bar_separator_x(right_bar);
+    RectF::FromPoints(Vec2{left_bar_x, top_limitzone.topY()}, Vec2{right_bar_x, bottom_limitzone.bottomY()}).draw(HSV{axis_color, 0.15});
+
+
     guide_font(U"  y:{}"_fmt(y_axis_text_state.text)).draw(20, Arg::topLeft = top_limitzone.tl(), font_color);
     guide_font(U"  max").draw(20, Arg::topLeft = middlezone.tl(), axis_color);
     guide_font(U"  min").draw(20, Arg::bottomLeft = middlezone.bl(), axis_color);
     guide_font(U"t:小節 ").draw(20, Arg::topRight = bottom_limitzone.tr(), font_color);
-
+    
     draw_bar_separators();
     sequence_panel.left().drawArrow(5.0, {10.0, 10.0}, axis_color);
     bottom_limitzone.top().drawArrow(5.0, {10.0, 10.0}, axis_color);

@@ -3,6 +3,7 @@
 # include "util.hpp"
 # include "Concepts.hpp"
 # include "Interface/PanelComponents.hpp"
+# include "ComposedRenderer.hpp"
 
 class HarmonicGuide : public ParameterControllerPanel {
     public:
@@ -22,6 +23,8 @@ class HarmonicGuide : public ParameterControllerPanel {
         JSON snapshot() const override  { return snapshot_internal().encode(); }
         void memento(const JSON& json) override;
 
+        double left_bar = 0;
+        double right_bar = 0;
     private:
         Array<double> sequence { 0, 1.9, -1.0, 1.7 };
         int32_t count_of_bars = 16;
@@ -55,10 +58,11 @@ class HarmonicGuide : public ParameterControllerPanel {
         Rect sequence_panel;
         Rect semantic_panel;
         TextEditState y_axis_text_state{U"明るさ"};
-
+        
         Font guide_font{24};
 
         double bar_separator_x(int32_t bar) const;
+        double bar_separator_x(double bar) const;
         double bar_separator_width() const;
         double intensity_to_plotted_point_y(double intensity) const;
         double plotted_point_y_to_intensity(double y) const;

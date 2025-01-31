@@ -5,6 +5,8 @@
 # include "RichButton.hpp"
 # include "MainApp.hpp"
 
+# include "utility/notificator.hpp"
+
 /**
  * 1) 来た人に打ち込んでもらう
  * 2) パワポで生成物を図る。
@@ -30,18 +32,15 @@ void Main()
     Scene::SetResizeMode(ResizeMode::Keep);
     Window::SetStyle(WindowStyle::Sizable);
     Scene::SetBackground(HSV{210, 0.1, 0.15});
+
+    Addon::Register<NotificationAddon>(U"NotificationAddon");
+    NotificationAddon::SetLifeTime(3.0);
     
     // フォント
     FontAsset::Register(U"default", FontMethod::MSDF, 48, Typeface::Bold);
     FontAsset::Register(U"icon",    FontMethod::MSDF, 40, Typeface::Icon_MaterialDesign);
     FontAsset::Register(U"button",  40, FileSystem::GetFolderPath(SpecialFolder::UserFonts) + U"ロゴたいぷゴシック.otf");
-    
-	// 環境変数から API キーを取得する
-    TextReader api_key_text{U"../src/credential/OPEN_AI_KEY.txt"};
-	const String API_KEY = api_key_text.readAll();
-    assert(not API_KEY.empty());
-    MainApp main_app{API_KEY};
-
+    MainApp main_app{};
 	while (System::Update())
 	{
         ClearPrint();

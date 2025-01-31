@@ -13,7 +13,8 @@ static String find_last_block(const String& GPT_answer, const std::string& kind)
     }
     if (matches.size() == 0) { return U""; }
     
-    const std::string last_match_str = matches.str(matches.size() - 1);
+    std::string last_match_str = matches.str(matches.size() - 1);
+    last_match_str = std::regex_replace(last_match_str, std::regex("\n{2,}"), "\n");
     return Unicode::FromUTF8(last_match_str);
 }
 

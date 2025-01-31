@@ -6,5 +6,5 @@ App/example
 icon.icns
 build
 node_modules
-src/credential/OPEN_AI_KEY.txt
+**/credential/*.txt
 .DS_Store

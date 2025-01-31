@@ -65,8 +65,7 @@ void EmotionalController::render(){
     display_panel.center().asCircle(point_inner_radius).drawFrame(point_outer_radius - point_inner_radius, basepoint_color);
     trail.draw(); // パラメータ点の軌跡の描画
     display_point().asCircle(point_inner_radius).drawFrame(point_outer_radius - point_inner_radius, point_color);
-
-
+    
     // パラメータ画面描画
     RoundRect{display_params.stretched(2), 5}.draw(background_color);
     {

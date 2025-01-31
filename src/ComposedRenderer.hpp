@@ -97,4 +97,6 @@ class ComposedViewer{
         void reset_scroll(){
             earliest_beat = 0;
         }
+        double left_bar() const     { return earliest_beat / 4; }
+        double right_bar() const    { return latest_beat() / 4; }
 };

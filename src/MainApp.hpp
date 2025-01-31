@@ -34,8 +34,9 @@ class MainApp {
     
 
 public:
-    MainApp() {}
-    MainApp(const String& API_KEY) { Init(API_KEY); }
+    MainApp() {
+        Init();
+    }
 
     void Update() {
         switch(mode){
@@ -63,7 +64,7 @@ public:
         }
     }
 private:
-    void Init(const String& API_KEY) {
+    void Init() {
         Rect window_rect{Point::Zero(), Scene::Size()};
         RectSlicer layout{window_rect, RectSlicer::X_axis};
         {
@@ -77,7 +78,7 @@ private:
         message_header_area = clipped(message_area.stretched(-30), RectF{0.0, 0.0, 0.8, 0.1});
         message_contents_area = clipped(message_area.stretched(-10), RectF{0.1, 0.1, 0.8, 0.8});
         
-        edit_room = {API_KEY, room_rect};
+        edit_room = {room_rect};
         mode = Edit;
         {
             TextReader credits_reader{U"../src/credits"};

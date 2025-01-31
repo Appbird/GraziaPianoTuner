@@ -28,6 +28,7 @@ class Composed{
                 System::MessageBoxOK(U"ABC記譜法の抽出に失敗しました。");
                 return;
             }
+            
             ABCParser parser;
             
             parser.parse(abc_score);

@@ -10,7 +10,7 @@ void HistoryViewer::render(){
         if (left_button_area.mouseOver())     { RoundRect{left_button_area, 5}.draw(ColorF{0, 0.4}); }
         RoundRect{left_button_area, 5}.drawFrame(2, fontcolor);
     }
-    if (current_page < int(snapshots.size() - 1)){
+    if (current_page < int(ui_snapshot.size() - 1)){
         font(U">").draw(int(right_button_area.h), Arg::center = right_button_area.center(), fontcolor);
         if (right_button_area.mouseOver())    { RoundRect{right_button_area, 5}.draw(ColorF{0, 0.4}); }
         RoundRect{right_button_area, 5}.drawFrame(2, fontcolor);
@@ -21,9 +21,10 @@ void HistoryViewer::save(const String& title, const DateTime& timestamp){
     const FilePath directory_path = U"./archive/";
     const FilePath jsonpath = directory_path + U"{}.json"_fmt(timestamp).replace(U" ", U"_");
     JSON json;
-    for (const Snapshot& snapshot:snapshots){
-        json.push_back(snapshot.encode());
+    for (const Snapshot& snapshot:ui_snapshot){
+        json[U"ui_snapshot"].push_back(snapshot.encode());
     }
+    json[U"llm_snapshot"] = LLM_dialog;
     json.save(jsonpath);
 }
 
@@ -32,12 +33,13 @@ void HistoryViewer::load_json(const FilePath& path){
     assert(json);
     assert(json.isArray());
     assert(json.size() > 0);
-    snapshots.clear();
-    for (const auto& [key, element]:json){
+    ui_snapshot.clear();
+    for (const auto& [key, element]:json[U"ui_snapshot"]){
         const auto& result = Snapshot::decode(element);
-        snapshots.push_back(result);
+        ui_snapshot.push_back(result);
     }
-    current_page = (int)snapshots.size() - 1;
+    current_page = (int)ui_snapshot.size() - 1;
+    LLM_dialog = json[U"llm_snapshot"];
     m_is_page_refreshed = true;
 }
 void HistoryViewer::set_render_area(const Rect& arg_render_area){

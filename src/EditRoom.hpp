@@ -1,7 +1,7 @@
 # pragma once
 # include <Siv3D.hpp>
 # include "Layout.hpp"
-# include "MusicalGPT4.hpp"
+# include "LLMAgents.hpp"
 # include "util.hpp"
 # include "HistoryViewer.hpp"
 # include "Interface/PanelComponents.hpp"
@@ -9,7 +9,7 @@
 
 class EditRoom{
 public:
-    MusicalGPT4 musicalGPT4;
+    LLMAgents composers;
     Composed player;
     ComposedViewer composed_viewer;
     //#DONE 多様性
@@ -18,7 +18,6 @@ public:
     // このセッション（編集作業）を開始した時刻。アプリケーションを開始した時、リセットボタンを押した時に、その時刻にセットされる。
     DateTime starting_time_session;
 private:
-    String GPT_API_KEY;
 	// 回答を格納する変数
     bool editable = true;
     ParameterControllMode mode = ParameterControllMode::HarmonicGuide;
@@ -46,13 +45,11 @@ private:
     // 与えられたSnapshotに基づいて状態を復元する。
     void restore(const HistoryViewer::Snapshot& snapshot);
     // GPTからの返答を解釈する
-    void set_GPT_answer(const String& user_to_LLM, const String& answer);
+    void set_GPT_answer(const String& answer);
     
 public:
     EditRoom(){}
-    EditRoom(const String& _GPT_API_KEY, const Rect& area):
-        musicalGPT4{_GPT_API_KEY},
-        GPT_API_KEY(_GPT_API_KEY),
+    EditRoom(const Rect& area):
         font_smart_path(FileSystem::GetFolderPath(SpecialFolder::UserFonts) + U"03スマートフォントUI.otf")
     {
         set_rect(area);

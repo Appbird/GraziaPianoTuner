@@ -1,5 +1,38 @@
 # include "Music.hpp"
 
+static String insert_chord_comments(const String& abc_code) {
+    std::stringstream input{abc_code.toUTF8()};
+    std::stringstream output;
+    std::string line;
+    bool inserted = false;
+    
+    std::string chords = 
+        "%%MIDI chordname Maj7 0 4 7 11\n"
+        "%%MIDI chordname maj9 0 4 7 11 14\n"
+        "%%MIDI chordname Maj9 0 4 7 11 14\n"
+        "%%MIDI chordname min6 0 3 7 9\n"
+        "%%MIDI chordname m11 0 3 7 10 14 17\n"
+        "%%MIDI chordname 13 0 4 7 10 14 21\n"
+        "%%MIDI chordname m13 0 3 7 10 14 21\n"
+        "%%MIDI chordname 7#9 0 4 7 10 15\n"
+        "%%MIDI chordname 7#11 0 4 7 10 18\n"
+        "%%MIDI chordname 7#13 0 4 7 10 22\n"
+        "%%MIDI chordname 7b9 0 4 7 10 13\n"
+        "%%MIDI chordname 7b11 0 4 7 10 16\n"
+        "%%MIDI chordname 7b13 0 4 7 10 20\n"
+        "%%MIDI chordname add9 0 4 7 14\n"
+        "%%MIDI chordname add11 0 4 7 17\n"
+        "%%MIDI chordname add13 0 4 7 21\n";
+    while (std::getline(input, line)) {
+        output << line << "\n";
+        if (line == "%%MIDI gchord c2c2" && !inserted) {
+            output << chords; // 既存の改行を含んでいるのでそのまま挿入
+        }
+    }
+
+    return Unicode::FromUTF8(output.str());
+}
+
 void Music::prepare_melody_notes(){
     // メロディパートの解析
     smf::MidiEventList& melody_track = midi[1];    
@@ -55,7 +88,7 @@ double Music::get_beats_per_seconds(const double current_beat) const {
     const auto target = std::partition_point(
         tempo_events.begin(),
         tempo_events.end(),
-        [&](const TempoEvent& a){ return a.start_beats <= current_beat; }
+        [&](const TempoEvent& a){ return int32(a.start_beats) <= current_beat; }
     );
     assert(std::distance(tempo_events.begin(), target) > 0);
     return (target - 1)->beats_per_seconds;
@@ -69,7 +102,7 @@ Array<Note>::const_iterator Music::get_next_note_index(const double current_beat
     const auto target = std::partition_point(
         notes.begin(),
         notes.end(),
-        [&](const Note& a){ return a.start_beats <= current_beat; }
+        [&](const Note& a){ return int(a.start_beats) <= current_beat; }
     );
     assert(std::distance(notes.begin(), target) > 0);
     return target;
@@ -81,7 +114,7 @@ Array<ChordEvent>::const_iterator Music::get_next_chord_index(const double curre
     const auto target = std::partition_point(
         chord_events.begin(),
         chord_events.end(),
-        [&](const ChordEvent& a){ return a.start_beats <= current_beat; }
+        [&](const ChordEvent& a){ return int(a.start_beats) <= current_beat; }
     );
     assert(std::distance(chord_events.begin(), target) > 0);
     return target;
@@ -94,7 +127,7 @@ double Music::beats_to_seconds(const double beats) const {
     const auto last_tempo_track = std::partition_point(
         tempo_events.begin(),
         tempo_events.end(),
-        [&](const TempoEvent& a){ return a.start_beats <= beats; }
+        [&](const TempoEvent& a){ return int(a.start_beats) <= beats; }
     ) - 1;
     assert(std::distance(tempo_events.begin(), last_tempo_track + 1) > 0);
     assert(last_tempo_track != tempo_events.end());

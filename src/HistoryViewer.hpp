@@ -9,7 +9,6 @@ class HistoryViewer
     public:
         struct Snapshot{
             String request;
-            String user_to_LLM;
             String answer_from_LLM;
             ParameterControllMode params_type;
             JSON params;
@@ -17,13 +16,11 @@ class HistoryViewer
             Snapshot(){}
             Snapshot(
                 const String& arg_request,
-                const String& arg_user,
                 const String& arg_answer,
                 ParameterControllMode params_type,
                 const JSON& parameter_panel_snapshot
             ):
                 request(arg_request),
-                user_to_LLM(arg_user),
                 answer_from_LLM(arg_answer),
                 params_type(params_type),
                 params(parameter_panel_snapshot)
@@ -31,7 +28,6 @@ class HistoryViewer
             JSON encode() const {
                 JSON result;
                 Field2JSON(result, request);
-                Field2JSON(result, user_to_LLM);
                 Field2JSON(result, answer_from_LLM);
                 Field2JSON(result, params);
                 result[U"params_type"] = ToString(params_type);
@@ -50,7 +46,6 @@ class HistoryViewer
                 assert(json[U"params"].isString());
                 return {
                     json[U"request"].getString(),
-                    json[U"user_to_LLM"].getString(),
                     json[U"answer_from_LLM"].getString(),
                     ToEnumParameterControllMode(json[U"params_type"].getString()),
                     json[U"params"]
@@ -66,10 +61,11 @@ class HistoryViewer
         bool m_is_page_refreshed = false;
         
         Snapshot stashed;
-        Array<Snapshot> snapshots;
+        Array<Snapshot> ui_snapshot;
         Font font{30, FileSystem::GetFolderPath(SpecialFolder::UserFonts) + U"03スマートフォントUI.otf", FontStyle::Bold};
         
     public:
+        JSON LLM_dialog;
         int current_page = 0;
         HistoryViewer(){}
         HistoryViewer(const Rect& arg_render_area){
@@ -78,19 +74,19 @@ class HistoryViewer
         void set_render_area(const Rect& arg_render_area);
         
         Snapshot& at(){
-            assert(0 <= current_page and current_page < int(snapshots.size()));            
-            return snapshots[current_page];
+            assert(0 <= current_page and current_page < int(ui_snapshot.size()));            
+            return ui_snapshot[current_page];
         }
-        int size(){ return int(snapshots.size()); }
+        int size(){ return int(ui_snapshot.size()); }
 
         void remember(const Snapshot& snapshot){
             if (size() != 0) { current_page = current_page + 1; }
-            snapshots.push_back(snapshot);
+            ui_snapshot.push_back(snapshot);
         }
 
         const Snapshot& pick_snapshot(){
-            if (0 <= current_page and current_page < int(snapshots.size())){
-                return snapshots[current_page];
+            if (0 <= current_page and current_page < int(ui_snapshot.size())){
+                return ui_snapshot[current_page];
             } else {
                 assert(0);
             }
@@ -111,7 +107,7 @@ class HistoryViewer
                 current_page--;
                 m_is_page_refreshed = true;
             }
-            if (right_button_area.leftClicked() and current_page < int(snapshots.size() - 1)) {
+            if (right_button_area.leftClicked() and current_page < int(ui_snapshot.size() - 1)) {
                 current_page++;
                 m_is_page_refreshed = true;
             }
@@ -119,12 +115,8 @@ class HistoryViewer
         void render();
         void save(const String& title, const DateTime& timestamp);
         void load_json(const FilePath& path);
-        const Array<Snapshot>& see_snapshots(){
-            return snapshots;
-        }
-
         void reset(){
-            snapshots.clear();
+            ui_snapshot.clear();
         }
         
 
