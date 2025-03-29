@@ -39,8 +39,8 @@ void EditRoom::update(){
     history.update();
     // #FIXME downcastを利用した方法はできるだけ避けたい。
     // | 別の方法で、これらの情報をcontroller_panelに伝達したいところ。
-    std::shared_ptr<HarmonicGuide> harmonic_guide = std::static_pointer_cast<HarmonicGuide>(controller_panel);
-    if (harmonic_guide) {
+    std::shared_ptr<HarmonicGuide> harmonic_guide = std::dynamic_pointer_cast<HarmonicGuide>(controller_panel);
+    if (harmonic_guide == controller_panel) {
         harmonic_guide->left_bar    = composed_viewer.left_bar();
         harmonic_guide->right_bar   = composed_viewer.right_bar();
     }

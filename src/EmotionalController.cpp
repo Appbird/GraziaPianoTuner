@@ -69,7 +69,7 @@ void EmotionalController::render(){
     // パラメータ画面描画
     RoundRect{display_params.stretched(2), 5}.draw(background_color);
     {
-        // SimpleGUI::CheckBox(using_param, U"感情パラメータ指定", display_checkbox_text.pos, display_checkbox_text.w, active);
+        SimpleGUI::CheckBox(using_param, U"感情パラメータ指定", display_checkbox_text.pos, display_checkbox_text.w, active);
         display_axis_guide_font(U"X軸").draw(int(display_x_axis_label.h * 0.7), Arg::center = display_x_axis_label.center());
         SimpleGUI::TextBox(x_axis_text_state, display_x_axis_contents.pos, display_x_axis_contents.w, 100UL, using_param and active);
         param_value_font(U"{: .2f}"_fmt(emotional_point.x)).draw(int(display_x_axis_label.h * 0.5), Arg::center = display_x_axis_value.center(), ColorF{0.8});

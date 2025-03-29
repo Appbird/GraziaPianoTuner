@@ -68,8 +68,8 @@ class EmotionalController : public ParameterControllerPanel {
         struct Snapshot {
             String X_axis;
             String Y_axis;
-            Vec2 emotional_parameters;
-            bool is_used;
+            Vec2 emotional_parameters = {0, 0};
+            bool is_used = true;
             Snapshot(
                 String X_axis,
                 String Y_axis,
