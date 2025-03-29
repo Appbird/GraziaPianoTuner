@@ -31,8 +31,6 @@ void HistoryViewer::save(const String& title, const DateTime& timestamp){
 void HistoryViewer::load_json(const FilePath& path){
     JSON json = JSON::Load(path);
     assert(json);
-    assert(json.isArray());
-    assert(json.size() > 0);
     ui_snapshot.clear();
     for (const auto& [key, element]:json[U"ui_snapshot"]){
         const auto& result = Snapshot::decode(element);

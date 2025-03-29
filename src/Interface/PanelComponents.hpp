@@ -9,6 +9,8 @@ public:
     // 更新処理
     virtual void update() = 0;
 
+    virtual void on_submit() {};
+
     // 描画処理
     virtual void render() = 0;
 

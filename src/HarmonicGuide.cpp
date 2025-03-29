@@ -62,6 +62,10 @@ void HarmonicGuide::draw_semantic_panel() {
     }
 }
 
+void HarmonicGuide::on_submit() {
+    set_parameter_min_max();
+}
+
 void HarmonicGuide::draw_sequence_panel() const {
     RoundRect{sequence_panel, 5}.draw(panel_background_color);
     top_limitzone.draw(limitzone_color);
@@ -69,8 +73,10 @@ void HarmonicGuide::draw_sequence_panel() const {
     RoundRect{sequence_panel, 5}.drawFrame(5, separator_color);
     const double left_bar_x     = bar_separator_x(left_bar);
     const double right_bar_x    = bar_separator_x(right_bar);
-    RectF::FromPoints(Vec2{left_bar_x, top_limitzone.topY()}, Vec2{right_bar_x, bottom_limitzone.bottomY()}).draw(HSV{axis_color, 0.15});
-
+    RectF::FromPoints(
+        Vec2{left_bar_x, top_limitzone.topY()},
+        Vec2{right_bar_x, bottom_limitzone.bottomY()}
+    ).draw(HSV{axis_color, 0.15});
 
     guide_font(U"  y:{}"_fmt(y_axis_text_state.text)).draw(20, Arg::topLeft = top_limitzone.tl(), font_color);
     guide_font(U"  max").draw(20, Arg::topLeft = middlezone.tl(), axis_color);
@@ -80,7 +86,7 @@ void HarmonicGuide::draw_sequence_panel() const {
     draw_bar_separators();
     sequence_panel.left().drawArrow(5.0, {10.0, 10.0}, axis_color);
     bottom_limitzone.top().drawArrow(5.0, {10.0, 10.0}, axis_color);
-    plot_sequence(); 
+    plot_sequence();
 }
 
 void HarmonicGuide::draw_bar_separators() const {
@@ -91,42 +97,55 @@ void HarmonicGuide::draw_bar_separators() const {
         );
         control_unit.right().draw(2, separator_color);
         guide_font(U"{} "_fmt(bar + control_unit_length)).draw(
-            16, Arg::bottomRight = Vec2{control_unit.rightX(), middlezone.bottomY()},
+            16,
+            Arg::bottomRight = Vec2{control_unit.rightX(), middlezone.bottomY()},
             axis_color
         );
     }
 }
 double HarmonicGuide::intensity_to_plotted_point_y(double intensity) const {
-    intensity = Clamp(intensity, -1.0, 2.0);
-    if (intensity < 0.0) {
-        return std::lerp(bottom_limitzone.bottomY(), bottom_limitzone.topY(), intensity + 1.0);
-    } else if (intensity < 1.0) {
-        return std::lerp(middlezone.bottomY(), middlezone.topY(), intensity);
+    intensity = Clamp(intensity, parameter_exceedbottom(), parameter_exceedtop());
+    const double normalized_intensity = (intensity - parameter_min) / parameter_length();
+    if (normalized_intensity < 0.0) {
+        return std::lerp(bottom_limitzone.bottomY(), bottom_limitzone.topY(), normalized_intensity + 1.0);
+    } else if (normalized_intensity < 1.0) {
+        return std::lerp(middlezone.bottomY(), middlezone.topY(), normalized_intensity);
     } else {
-        return std::lerp(top_limitzone.bottomY(), top_limitzone.topY(), intensity - 1.0);
+        return std::lerp(top_limitzone.bottomY(), top_limitzone.topY(), normalized_intensity - 1.0);
     }
 }
 
 double HarmonicGuide::plotted_point_y_to_intensity(double y) const {
     y = Clamp<double>(y, sequence_panel.topY(), sequence_panel.bottomY());
+    double intensity_normalized;
     if (y > bottom_limitzone.topY()) {
-        return double(bottom_limitzone.bottomY() - y) / bottom_limitzone.h - 1.0;
+        intensity_normalized = double(bottom_limitzone.bottomY() - y) / bottom_limitzone.h - 1.0;
     } else if (y > middlezone.topY()) {
-        return double(middlezone.bottomY() - y) / middlezone.h;
+        intensity_normalized = double(middlezone.bottomY() - y) / middlezone.h;
     } else {
-        return double(top_limitzone.bottomY() - y) / top_limitzone.h + 1.0;
+        intensity_normalized = double(top_limitzone.bottomY() - y) / top_limitzone.h + 1.0;
     }
+    return intensity_normalized * parameter_length() + parameter_min;
 }
 
 Color HarmonicGuide::plotted_point_color(double intensity) const {
-    intensity = Clamp(intensity, -1.0, 2.0);
-    if (intensity < 0.0) {
-        return Color{overlimit_point_color}.lerp(control_point_color, intensity + 1.0);
-    } else if (intensity < 1.0) {
+    intensity = Clamp(intensity, parameter_exceedbottom(), parameter_exceedtop());
+    double normalized_intensity = (intensity - parameter_min) / parameter_length();
+    if (intensity < parameter_min) {
+        return Color{overlimit_point_color}.lerp(control_point_color, normalized_intensity + 1.0);
+    } else if (intensity < parameter_max) {
         return control_point_color;
     } else {
-        return Color{control_point_color}.lerp(overlimit_point_color, intensity - 1.0);
+        return Color{control_point_color}.lerp(overlimit_point_color, normalized_intensity - 1.0);
     }
+}
+
+void HarmonicGuide::set_parameter_min_max() {
+    const auto [min, max] = std::minmax_element(sequence.begin(), sequence.end());
+    parameter_min = std::min(*min, parameter_min);
+    parameter_max = std::max(*max, parameter_max);
+    snap(parameter_min);
+    snap(parameter_max);
 }
 
 void HarmonicGuide::plot_sequence() const {

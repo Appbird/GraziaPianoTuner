@@ -15,6 +15,7 @@ class HarmonicGuide : public ParameterControllerPanel {
         void set_state(bool state) override;
         void set_render_area(const Rect& render_area) override;
         bool terminated() override { return false; }
+        void on_submit() override;
         
         // Describable
         String describe() const override { return snapshot_internal().describe(); }
@@ -26,10 +27,17 @@ class HarmonicGuide : public ParameterControllerPanel {
         double left_bar = 0;
         double right_bar = 0;
     private:
-        Array<double> sequence { 0, 1.9, -1.0, 1.7 };
+        Array<double> sequence { 0, 0.25, 0.5, 1.0 };
         int32_t count_of_bars = 16;
         int32_t control_unit_length = 4;
         Optional<int32_t> current_control_unit_index = 0;
+
+        double parameter_min = 0.0;
+        double parameter_max = 1.0;
+        double parameter_length() const { return parameter_max - parameter_min; }
+        double parameter_exceedtop() const { return parameter_max + parameter_length(); }
+        double parameter_exceedbottom() const { return parameter_min - parameter_length(); }
+        void set_parameter_min_max();
     private:
         struct Snapshot;
 
@@ -67,7 +75,7 @@ class HarmonicGuide : public ParameterControllerPanel {
         double intensity_to_plotted_point_y(double intensity) const;
         double plotted_point_y_to_intensity(double y) const;
         Color plotted_point_color(double intensity) const;
-        
+
         void draw_sequence_panel() const;
         void draw_bar_separators() const;
         void draw_semantic_panel();
