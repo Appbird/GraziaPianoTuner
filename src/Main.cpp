@@ -32,9 +32,9 @@ void Main()
     Scene::SetBackground(HSV{210, 0.1, 0.15});
     
     // フォント
-    FontAsset::Register(U"default", FontMethod::MSDF, 48, Typeface::Bold);
+    FontAsset::Register(U"default", 40, FileSystem::GetFolderPath(SpecialFolder::SystemFonts) + U"Avenir.ttc");
     FontAsset::Register(U"icon",    FontMethod::MSDF, 40, Typeface::Icon_MaterialDesign);
-    FontAsset::Register(U"button",  40, FileSystem::GetFolderPath(SpecialFolder::UserFonts) + U"ロゴたいぷゴシック.otf");
+    FontAsset::Register(U"button",  40, FileSystem::GetFolderPath(SpecialFolder::SystemFonts) + U"Avenir.ttc");
     
 	// 環境変数から API キーを取得する
     TextReader api_key_text{U"../src/credential/OPEN_AI_KEY.txt"};

@@ -14,14 +14,14 @@ class SideMenuButtons {
         constexpr HSV example_color{90, 0.4, 0.7};
         //ボタン
         buttons = {
-            {U"credits",    {U"\U000F0189", U"クレジット", Rect{}, true, credits_color}},
-            {U"save",       {U"\U000F0193", U"保存", Rect{}, false, folder_op_color}},
-            {U"load",       {U"\U000F024B", U"ロード", Rect{}, true, folder_op_color}},
-            {U"reset",      {U"\U000F0A7A", U"リセット", Rect{}, true, folder_op_color}},
-            {U"qr",         {U"\U000F0432", U"QRコード", Rect{}, false, qr_color}},
-            {U"ex1",        {U"\U000F0387", U"Bright Sun", Rect{}, true, example_color}},
-            {U"ex2",        {U"\U000F0387", U"Cafe Serenity", Rect{}, true, example_color}},
-            {U"ex3",        {U"\U000F0387", U"Bright Daybreak", Rect{}, true, example_color}}
+            {U"credits",    {U"\U000F0189", U"Credit", Rect{}, true, credits_color}},
+            {U"save",       {U"\U000F0193", U"Save", Rect{}, false, folder_op_color}},
+            {U"load",       {U"\U000F024B", U"Load", Rect{}, true, folder_op_color}},
+            {U"reset",      {U"\U000F0A7A", U"Reset", Rect{}, true, folder_op_color}},
+            {U"qr",         {U"\U000F0432", U"QR Code", Rect{}, false, qr_color}},
+            {U"ex1",        {U"\U000F0387", U"Ex1.\nBright Sun", Rect{}, true, example_color}},
+            {U"ex2",        {U"\U000F0387", U"Ex2.\nCafe Serenity", Rect{}, true, example_color}},
+            {U"ex3",        {U"\U000F0387", U"Ex3.\nBright Daybreak", Rect{}, true, example_color}}
         };
         Array<String> order {
             U"credits",

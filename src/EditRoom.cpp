@@ -59,7 +59,7 @@ void EditRoom::update(){
 void EditRoom::render(){
     // GUI
     // テキストボックスを表示する
-    GPT_answer_guide_font(U"GPT回答本文").drawBase(GPT_answer_guide_area.bl(), ColorF{0.7});
+    GPT_answer_guide_font(U"LLM's answer").drawBase(GPT_answer_guide_area.bl(), ColorF{0.7});
     SimpleGUI::TextArea(user_request_text_state, input_textbox_area.pos, input_textbox_area.size, 800, editable);
     SimpleGUI::TextArea(GPT_answer_text_state, GPT_answer_area.pos, GPT_answer_area.size, 5000, false);
     // ボタン表示
@@ -67,7 +67,7 @@ void EditRoom::render(){
         not user_request_text_state.text.isEmpty()
         or (emotional_controller.using_param and history.size() > 0)
     ) and editable;
-    if (SimpleGUI::Button(U"\U000F1C4D 送信", input_button_area.pos, input_button_area.w, button_enable))
+    if (SimpleGUI::Button(U"\U000F1C4D Send", input_button_area.pos, input_button_area.w, button_enable))
     { 
         const String input = user_request_text_state.text;
         musicalGPT4.request(input, emotional_controller);

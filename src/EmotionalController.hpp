@@ -73,12 +73,12 @@ class EmotionalController{
             Rect display_x_axis_label;
             Rect display_x_axis_contents;
             Rect display_x_axis_value;
-            TextEditState x_axis_text_state{U"躍動感"};
+            TextEditState x_axis_text_state{U"Dynamics"};
             
             Rect display_y_axis_label;
             Rect display_y_axis_contents;
             Rect display_y_axis_value;
-            TextEditState y_axis_text_state{U"明るさ"};
+            TextEditState y_axis_text_state{U"Brightness"};
 
             Rect display_checkbox_text; 
     
