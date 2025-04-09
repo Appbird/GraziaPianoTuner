@@ -56,7 +56,7 @@ L: 1/4
 Q: 1/4=160
 K: A major
 V:1
-%%MIDI gchord c2c2
+%%MIDI gchord b2b2
 | "A" ceeA | "D" df^cd | "Bm" eA^ce | "E7" ^G2e2 | % measure 1-4
 | "A" aece | "F#m" f^fed | "D" dBA^G | "A" A2 z2 | % measure 5-8
 | "D" d2 fd | "C#m" e^ceg | "Bm" bABc | "E7" e4 | % measure 9-12
@@ -71,7 +71,7 @@ M:4/4
 L:1/4
 Q:1/4=120
 K:Dm
-%%MIDI gchord c2c2
+%%MIDI gchord b2b2
 |"Dm" d2 "A7/C#" cB | "Bb" AG "Gm/A" F2 | "Gm/Bb" G2 "A7" F2 | "Dm" D4 | % measure 1-4
 |"Dm/C" c2 "Bdim/A" BA | "Gm" G3 "A7" A | "Dm/F" F2 "E7/G#" GA | "Am" A4 | % measure 4-8
 |"Dm" d3 "A7/C#" c | "Bb" AG "Gm/A" F2 | "Gm/Bb" G2 "A7" F2 | "Dm" D4 | % measure 9-12
@@ -86,7 +86,7 @@ M:4/4
 Q:1/4 = 180
 L:1/4
 K:D
-%%MIDI gchord c2c2
+%%MIDI gchord b2b2
 | "Dmaj7" D/2F/2A/2F/2 "A7" A/2C/2E/2A/2 | "Gmaj7" G/2B/2d/2B/2 "F#m7" A/2F/2C/2E/2 | "Em7" E/2G/2B/2E/2 "Bm7" D/2F/2A/2D/2 | "E7" ^G/2B/2D/2G/2 "A7" A/2E/2C/2A/2 | % measure 1-4
 | "Dmaj7" D/2F/2A/2F/2 "Gmaj7" G/2B/2d/2B/2 | "F#m7" A/2F/2C/2E/2 "Bm7" D/2F/2A/2D/2 | "E7" ^G/2B/2D/2G/2 "A7" A/2E/2C/2A/2 | "Dmaj7" D/2F/2A/2F/2 "A7" AE | % measure 4-8
 | "Dmaj7" DF "Gmaj7" GB | "F#m7" A/2F/2C/2E/2 "Em7" G/2B/2D/2G/2 | "A7" A/2E/2C/2A/2 "Dmaj7" DF | "Gmaj7" GB "A7" AE | % measure 9-12

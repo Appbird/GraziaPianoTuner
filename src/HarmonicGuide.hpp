@@ -44,8 +44,10 @@ class HarmonicGuide : public ParameterControllerPanel {
         HSV axis_color                  {88, 0.68, 0.80};
         HSV limitzone_color             {126, 0.35, 0.21};
         HSV panel_background_color      {90, 0.25, 0.09};
+        HSV panel_slider_color           {90, 0.30, 0.20};
         HSV font_color                  {0, 0.0, 1.0};
         HSV control_point_color         {125, 0.69, 1.0};
+        HSV control_point_color_darker         {125, 0.69, 0.90};
         HSV overlimit_point_color       {21, 0.79, 0.91};
         HSV semantic_target_button_color{104, 0.72, 0.65};
         HSV separator_color             {125, 0.34, 0.25};

@@ -41,7 +41,7 @@ L: 1/4
 Q: 1/4=160
 K: A major
 V:1
-%%MIDI gchord c2c2
+%%MIDI gchord b2b2
 | "A" ceeA | "D" df^cd | "Bm" eA^ce | "E7" ^G2e2 | % measure 1-4
 | "A" aece | "F#m" f^fed | "D" dBA^G | "A" A2 z2 | % measure 5-8
 | "D" d2 fd | "C#m" e^ceg | "Bm" bABc | "E7" e4 | % measure 9-12
@@ -78,7 +78,7 @@ L: 1/4
 Q: 1/4=160
 K: A major
 V:1
-%%MIDI gchord c2c2
+%%MIDI gchord b2b2
 %%MIDI program 1
 %%MIDI chordprog 64
 %%MIDI bassprog 45

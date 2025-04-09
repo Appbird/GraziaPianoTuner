@@ -3,6 +3,8 @@
 # include <regex>
 # include "DebugTools.hpp"
 
+static HSV darker(const HSV& c, const double x) { return {c.h, c.s, c.v * x, c.a}; }
+
 void HarmonicGuide::set_render_area(const Rect& render_area){
     display_rect    = render_area;
 
@@ -153,18 +155,18 @@ void HarmonicGuide::plot_sequence() const {
     int32_t i = 0;
     for (int32_t bar = control_unit_length/2; bar < count_of_bars; bar += control_unit_length, i++) {
         const double point_x = bar_separator_x(bar);
+        const double length = bar_separator_width() * 2;
         const double point_y = intensity_to_plotted_point_y(sequence[i]); 
         Vec2 current = {point_x, point_y};
-        Circle(current, point_inner_radius)
-            .drawFrame(
-                point_outer_radius - point_inner_radius,
-                plotted_point_color(sequence[i])
-            );
-        if (i > 0) {
-            Line line{previous, current};
-            line.stretched(-point_inner_radius)
-                .draw(2.0, plotted_point_color(sequence[i-1]), plotted_point_color(sequence[i]));
-        }
+        RoundRect{RectF(
+            Arg::center = Vec2{point_x, middlezone.centerY()},
+            {length/7, middlezone.h}),
+            3
+        }.draw(panel_slider_color);
+        Color c = plotted_point_color(sequence[i]);
+        RoundRect{RectF(Arg::center = current, {length, 10}), 3}
+            .draw(c)
+            .drawFrame(3, darker(c, 0.6));
         previous = current;
     }
 }

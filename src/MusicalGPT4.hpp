@@ -16,7 +16,7 @@ class MusicalGPT4{
         bool debug = false;
             bool debug_is_ready = false;
             int debug_count = 0;
-        Array<std::pair<String, String>> history;
+        OpenAI::Chat::Request history;
         Array<int32> iteration_indices;
         AsyncHTTPTask task;
         bool is_ready();
@@ -45,35 +45,8 @@ class MusicalGPT4{
         HTTPProgress progress() { return task.getProgress(); }
         void update()           {  }
 
-        void remember(const JSON& json) {
-            assert(json[U"dialog"].isArray());
-            history.clear();
-            iteration_indices.clear();
-            for (const auto& speaking : json[U"dialog"].arrayView()) {
-                assert(speaking[U"role"].isString());
-                assert(speaking[U"prompt"].isString());
-                history.push_back({speaking[U"role"].getString(), speaking[U"prompt"].getString()});
-            }
+        void remember(const JSON& json);
 
-            assert(json[U"iteration_indices"].isArray());
-            for (const auto& index : json[U"iteration_indices"].arrayView()) {
-                assert(index.isInteger());
-                iteration_indices.push_back(index.get<int32>());
-            }
-        }
-
-        JSON snapshot() const {
-            JSON result;
-            for (const auto& [role, prompt] : history) {
-                JSON speaking_in_json;
-                Field2JSON(speaking_in_json, role);
-                Field2JSON(speaking_in_json, prompt);
-                result[U"dialog"].push_back(speaking_in_json);
-            }
-            for (const auto& index : iteration_indices) {
-                result[U"iteration_indices"].push_back(index);
-            }
-            return result;
-        }
+        JSON snapshot() const;
 
 };
