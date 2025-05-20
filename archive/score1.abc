@@ -1,0 +1,23 @@
+X:1
+T:City Lights Groove
+M:4/4
+L:1/4
+Q:1/4=140
+K:F#m
+%%MIDI gchord b2b2
+%%MIDI program 5   % エレクトリックピアノ1
+%%MIDI chordprog 5 % エレクトリックピアノ1（バッキング）
+%%MIDI bassprog 34 % エレクトリックベース
+| "F#m7" F2 A2 | "C#m7" E F G F | "Dmaj7" A2 B2 | "C#m7" G F E C | % measure 1-4
+%%MIDI program 65  % アルトサックス
+%%MIDI chordprog 5 % エレクトリックピアノ1（バッキング）
+%%MIDI bassprog 34 % エレクトリックベース
+| "Bm7" B2 F2 | "E7" ^G F E D | "Amaj7" E2 c2 | "C#m7" G F E F | % measure 5-8
+%%MIDI program 5   % エレクトリックピアノ1
+%%MIDI chordprog 89 % パッド1（new age）（コードバッキングは空間感メインに）
+%%MIDI bassprog 34 % エレクトリックベース
+| "Dmaj7" A B c d | "C#m7" G F E F | "Bm7" B2 d2 | "E7" ^G4 | % measure 9-12
+%%MIDI program 65  % アルトサックス
+%%MIDI chordprog 5 % エレクトリックピアノ1（バッキング）
+%%MIDI bassprog 34 % エレクトリックベース
+| "F#m7" F A B c | "E7" ^G F E D | "Bm7" B c d F | "C#7" E2 G2 | % measure 13-16

@@ -1,0 +1,24 @@
+
+X:1
+T:City Lights to Dawn
+M:4/4
+L:1/4
+Q:1/4=140
+K:F#m
+%%MIDI gchord b2b2
+%%MIDI program 5    % エレクトリックピアノ:都会感高め
+%%MIDI chordprog 5  % エレピ系
+%%MIDI bassprog 34  % エレクトリックベース
+| "F#m7" F2 A2 | "C#m7" E F G F | "Dmaj7" A2 B2 | "C#m7" G F E C | % measure 1-4
+%%MIDI program 65   % サックス:都会感継続 
+%%MIDI chordprog 5  % エレピ系
+%%MIDI bassprog 34  % エレクトリックベース
+| "Bm7" B2 F2 | "E7" G F E D | "Amaj7" E2 c2 | "C#m7" G F E F | % measure 5-8
+%%MIDI program 5    % エレクトリックピアノ（やや余韻～都会感中庸）
+%%MIDI chordprog 89 % パッド1（空間系）
+%%MIDI bassprog 34  % エレクトリックベース
+| "Dmaj7" A B c d | "C#m7" G F E F | "Bm7" B2 d2 | "E7" G4 | % measure 9-12
+%%MIDI program 1    % アコースティックピアノ：都会感ほぼゼロで自然体
+%%MIDI chordprog 1  % アコースティックピアノ（伴奏も同様）
+%%MIDI bassprog 33  % アコースティックベース（ウッドベース）
+| "F#m" f2 a2 | "Bm" b2 f2 | "D" d2 f2 | "A" e4 | % measure 13-16

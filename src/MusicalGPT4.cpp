@@ -19,7 +19,9 @@ static String role2str(const OpenAI::Chat::Role role){
         case Role::Assistant: return U"assitant";
     }
 }
-
+void MusicalGPT4::set_model(StringView model_name) {
+	model = model_name;
+}
 void MusicalGPT4::request(const String& user_requset) {
     tell(user_requset);
     request();
@@ -96,13 +98,14 @@ void MusicalGPT4::dump_answer() const {
 }
 
 
-MusicalGPT4::MusicalGPT4(FilePathView prompt_filepath)
+MusicalGPT4::MusicalGPT4(StringView model, FilePathView prompt_filepath)
 {
     TextReader api_key_reader{U"credential/OPEN_AI_KEY.txt"};
     TextReader sysprpt{prompt_filepath};
     GPT_API_KEY = api_key_reader.readAll();
     system_prompt = sysprpt.readAll();
     history.messages.push_back({OpenAI::Chat::Role::System, system_prompt});
+	set_model(model);
 }
 
 void MusicalGPT4::remember(const JSON& json) {

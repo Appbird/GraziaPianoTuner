@@ -9,7 +9,7 @@ class EmotionalController;
 
 class MusicalGPT4{
     public:
-        String model = U"gpt-4o-2024-11-20";
+        String model;
     private:
         String GPT_API_KEY;
         String system_prompt;
@@ -23,8 +23,8 @@ class MusicalGPT4{
         String get_answer();
         
     public:
-        MusicalGPT4(){}
-        MusicalGPT4(FilePathView prompt_filepath);
+        MusicalGPT4(StringView model_name, FilePathView prompt_filepath);
+		void set_model(StringView model_name);
         
         /** LLMにuser_requestの内容に基づいて、楽曲を新たに記述するようリクエストする。
          * 出力の受け取りは非同期で行う必要がある。try_to_get_answer()を定期的に呼び出して、LLMからの応答が返ってきているかをチェックする必要がある。

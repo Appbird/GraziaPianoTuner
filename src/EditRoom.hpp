@@ -9,6 +9,7 @@
 
 class EditRoom{
 public:
+	String model_name = U"gpt-4.1-2025-04-14";
     LLMAgents composers;
     Composed player;
     ComposedViewer composed_viewer;
@@ -48,8 +49,11 @@ private:
     void set_GPT_answer(const String& answer);
     
 public:
-    EditRoom(){}
+    EditRoom():
+		composers{model_name}
+	{}
     EditRoom(const Rect& area):
+		composers{model_name},
         font_smart_path(FileSystem::GetFolderPath(SpecialFolder::UserFonts) + U"03スマートフォントUI.otf")
     {
         set_rect(area);

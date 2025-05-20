@@ -1,0 +1,23 @@
+X:1
+T:Halloween Nocturne
+M:4/4
+L:1/4
+Q:1/4=110
+K:Em
+%%MIDI gchord b2b2
+%%MIDI program 10     % グロッケン（Glockenspiel）で不気味に
+%%MIDI chordprog 48   % ストリングス（String Ensemble 1）
+%%MIDI bassprog 20    % 教会オルガン（パイプオルガンベースとして）
+| "Em" E3 F | "D#dim" F G F E | "G" G2 B2 | "Am" A B c2 | % measure 1-4
+%%MIDI program 8      % チェレスタ（Celesta, closest: 8）
+%%MIDI chordprog 47   % オーケストラハープ（Orchestral Harp）
+%%MIDI bassprog 71    % クラリネット（Clarinet, 柔らかい低音援護役として）
+| "Am" A2 E2 | "B7" F F G B | "Em" E2 G2 | "C" E G c2 | % measure 5-8
+%%MIDI program 1      % アコースティックピアノ（Acoustic Grand Piano）
+%%MIDI chordprog 1    % アコースティックピアノ（コードも同様にシンプルに）
+%%MIDI bassprog 33    % アコースティックベース（Acoustic Bass）
+| "Em" G F E2 | "C" E G c2 | "G" G B d2 | "D" F A d2 | % measure 9-12
+%%MIDI program 10     % グロッケンでハロウィンMAX
+%%MIDI chordprog 48   % ストリングス（緊迫感を強調）
+%%MIDI bassprog 20    % 教会オルガン（劇的に）
+| "Em" E3 F | "B7" F G B2 | "G" G2 B2 "F#7" F2 A2 | "Em" E4 | % measure 13-16

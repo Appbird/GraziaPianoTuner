@@ -3,10 +3,10 @@
 # include "MusicalGPT4.hpp"
 
 class LLMAgents {
-    MusicalGPT4 leader              {U"prompts/leader.txt"};
-    MusicalGPT4 chord_agent         {U"prompts/chord_agent.txt"};
-    MusicalGPT4 melody_agent        {U"prompts/melody_agent.txt"};
-    MusicalGPT4 instruments_agent   {U"prompts/instruments_agent.txt"};
+    MusicalGPT4 leader;
+    MusicalGPT4 chord_agent;
+    MusicalGPT4 melody_agent;
+    MusicalGPT4 instruments_agent;
     Optional<String> answer_including_score = none;
     String model;
     enum class State {
@@ -43,14 +43,21 @@ class LLMAgents {
     }
 
 public:
-    LLMAgents(const String& model) {
-        this->model = model;
-        leader.model            = model;
-        chord_agent.model       = model;
-        melody_agent.model      = model;
-        instruments_agent.model = model;
+    LLMAgents(const StringView model):
+		leader{model, U"prompts/leader.txt"},
+    	chord_agent{model, U"prompts/chord_agent.txt"},
+    	melody_agent{model, U"prompts/melody_agent.txt"},
+    	instruments_agent{model, U"prompts/instruments_agent.txt"}
+	{
+        set_model(model);
     }
-    LLMAgents(): LLMAgents(U"gpt-4o") {}
+	void set_model(const StringView model) {
+        this->model = model;
+        leader.set_model(model);
+		chord_agent.set_model(model);
+		melody_agent.set_model(model);
+		instruments_agent.set_model(model);
+	}
     StringView model_name() { return model; }
     void request(const String& prompt) {
         leader.request(prompt);

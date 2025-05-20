@@ -1,0 +1,25 @@
+X:1
+T:Boss Battle - Hope's Resolve
+M:4/4
+L:1/4
+Q:1/4=140
+K:Gm
+%%MIDI gchord b2b2
+%%MIDI program 49    % ストリングス・アンサンブル（メロディ）
+%%MIDI chordprog 61  % ブラス・セクション（和音・緊張感＋奥行き）
+%%MIDI bassprog 1    % アコースティックピアノ（重厚・パーカッション低音的役割も）
+| "Gm" G2 d2 | "D7" F2 A2 | "Gm" G2 B2 | "Cm" C2 E2 | % measure 1-4
+%%MIDI program 49    % ストリングス・アンサンブル（メロディ）
+%%MIDI chordprog 61  % ブラス・セクション（和音・多め）
+%%MIDI bassprog 1    % アコースティックピアノ
+| "Cm" C2 G2 | "Eb" G2 B2 | "D7" F2 A2 | "Gm" G2 d2 | % measure 5-8
+K:G
+%%MIDI program 11    % ビブラフォン（希望と輝き、Gメジャー明るさの象徴）
+%%MIDI chordprog 89  % パッド1（new age、壮大なコーラス感のPad）
+%%MIDI bassprog 48   % ストリングス（低音域: Gメジャーの伸びやかさ＆安定感）
+| "G" G2 B2 | "C" E2 G2 | "D" F2 A2 | "G" G4 | % measure 9-12
+K:Gm
+%%MIDI program 49    % ストリングス・アンサンブル（メロディ 緊迫＆ラスト感）
+%%MIDI chordprog 61  % ブラス・セクション（ラスボス終幕の重厚さ）
+%%MIDI bassprog 1    % アコースティックピアノ
+| "Gm" G2 d2 | "Bb" B2 F2 | "D7" A2 F2 | "Gm" G4 | % measure 13-16

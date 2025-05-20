@@ -97,7 +97,7 @@ void EditRoom::render(){
 }
 
 void EditRoom::reset(){
-    composers = LLMAgents{};
+    composers = LLMAgents{model_name};
     player = Composed{};
     composed_viewer = ComposedViewer{};
     history = HistoryViewer{};
