@@ -1,4 +1,5 @@
 # include "Music.hpp"
+#include <string>
 
 static String insert_chord_comments(const String& abc_code) {
     std::stringstream input{abc_code.toUTF8()};
@@ -25,7 +26,7 @@ static String insert_chord_comments(const String& abc_code) {
         "%%MIDI chordname add13 0 4 7 21\n";
     while (std::getline(input, line)) {
         output << line << "\n";
-        if (line == "%%MIDI gchord c2c2" && !inserted) {
+        if (line.find("MIDI gchord b2b2") != String::npos && !inserted) {
             output << chords; // 既存の改行を含んでいるのでそのまま挿入
         }
     }

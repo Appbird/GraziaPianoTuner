@@ -9,7 +9,7 @@
 
 class EditRoom{
 public:
-	String model_name = U"gpt-4.1-2025-04-14";
+	String model_name = U"claude-3-7-sonnet-20250219";
     LLMAgents composers;
     Composed player;
     ComposedViewer composed_viewer;

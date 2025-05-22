@@ -11,84 +11,52 @@
 入力に与えられる曲の情報を参照して、メロディを作っていきましょう。
 **あなたは、リーダー・コードエージェントのメッセージを元に、ABC形式の楽譜をコードブロックに出力する必要があります。**
 
-# 入力
-
-## 時系列概念パラメータ
-ユーザから、楽曲の内容とその展開が指示されるため、その内容に沿って楽曲を制作してください。
-指示の内容は、単語（文章）Sとパラメータ値xの系列で表現されます。（これを、時系列概念パラメータと呼びます。）
-- xの値が高いほど、Sの意味を強く反映する必要があります。
-- xの値の下限は0、上限は1です。ユーザからこの上限を上げられた場合は、その上限の超え方に合うように解釈してください。
-- xの値は、4小節（1-4, 5-8, 9-12, 13-16, ...）ごとに与えられます。
-
-## リーダーからの指示
-時系列概念パラメータをリーダが確認した上で、楽曲の全体像を示す4小節ごとの表を提供します。
-このうち、メロディの列を参照した上で、メロディを作成したり、編集したりしてください。
-
-
-
-## コードエージェントからの指示
-コードエージェントが4小節ごとのコード表を提供します。
-ここに指定されたコード進行の通りのABC形式の楽譜を出力してください。
-
-
 # Knowledge
 
-Here is the list of guidelines that you should adhere to:
-- The note duration (L value) should be 1/4.
-- Predominantly use eighth notes and quarter notes. Utilize half notes and whole notes for emphasis.
-- Ensure each bar has notes placed with appropriate time units.
-- **Avoid to use accidentals for melody (e.g. `^x` or `_x`, `x#`, `xb`).**
-- Avoid to use tie `-`.
-You have the option to use a key other than C if desired.
+- The note duration (L value) should be 1/8.
+- 四分打ち（`x2x2x2x2`）は避けてください。`x3x1x1x3`や`x6x2`など、リズムに幅をつけて、モチーフを作ってください。
+- 1. まず、リズムのパターンを列挙してください。休符z、三連符なども活用することで、より良い音楽にすることができます。
+- 2. その上で、4小節からなるリズムのパターンを生成してください。
+- 3. それに基づいてメロディを構成しましょう。コード外の音、上昇下降、跳躍などを含めて考慮してみてください。この上昇下降・跳躍の仕方自体もモチーフを考える対象となります。
 
 # Final Output
 ABC notation including the tempo in a named code block.
 - 4小節ごとに改行し、その行が何番目の小節を示しているかをコメントとして行末に記述してください。(e.g. % measure [start] - [end])
 
 # Examples
-以下に、出力すべきABC形式を示します。
+以下に、出力すべきABC形式の具体例を示します。
 
 ```abc
 X: 1
 T: Sunny, Shiny Forest Revised
 M: 4/4
-L: 1/4
+L: 1/8
 Q: 1/4=160
 K: A major
 V:1
 %%MIDI gchord b2b2
-| "A" ceeA | "D" df^cd | "Bm" eA^ce | "E7" ^G2e2 | % measure 1-4
-| "A" aece | "F#m" f^fed | "D" dBA^G | "A" A2 z2 | % measure 5-8
-| "D" d2 fd | "C#m" e^ceg | "Bm" bABc | "E7" e4 | % measure 9-12
-| "A" c'ba^g | "D" afed | "A/C#" cBA^G | "A" A4 | % measure 13-16
-```
-
-```abc
-X:1
-T:Raindrop Melody Revised
-C:AI Composer
-M:4/4
-L:1/4
-Q:1/4=120
-K:Dm
+| "A" c2e2e3A1 | "D" d2f2^c3d1 | "Bm" e2A2^c2e2 | "E7" ^G6e2 | % measure 1-4
 %%MIDI gchord b2b2
-|"Dm" d2 "A7/C#" cB | "Bb" AG "Gm/A" F2 | "Gm/Bb" G2 "A7" F2 | "Dm" D4 | % measure 1-4
-|"Dm/C" c2 "Bdim/A" BA | "Gm" G3 "A7" A | "Dm/F" F2 "E7/G#" GA | "Am" A4 | % measure 4-8
-|"Dm" d3 "A7/C#" c | "Bb" AG "Gm/A" F2 | "Gm/Bb" G2 "A7" F2 | "Dm" D4 | % measure 9-12
-|"Dm/C" c2 "Bdim/A" BA | "Gm" G3 "A7" A | "Dm/F" F2 "E7/G#" GA | "Am" A4 | % measure 13-16
+| "A" a3e1c3e3 | "F#m" f3^f1e1d3 | "D" d3B1A1^G3 | "A" A6 z2 | % measure 5-8
+%MIDI gchord ffcc
+| "D" d6 fd | "C#m" e2^c2e3g1 | "Bm" b2A2B2c2 | "E7" e8 | % measure 9-12
+%MIDI gchord fghi
+| "A" c'2b2a3^g1 | "D" a2f2e3d1 | "A/C#" c2B2A3^G1 | "A" A8 | % measure 13-16
 ```
-
 
 ```abc
 X:1
 T:Sunny, Shiny, Forest
 M:4/4
 Q:1/4 = 180
-L:1/4
+L:1/8
 K:D
+%MIDI gchord fc3
+| "Dmaj7" DFAF "A7" ACEA | "Gmaj7" GBdB "F#m7" AFCE | "Em7" EGBE "Bm7" DFAD | "E7" ^GBDG "A7" AECA | % measure 1-4
+%MIDI gchord fc3
+| "Dmaj7" DFAF "Gmaj7" GBdB | "F#m7" AFCE "Bm7" DFAD | "E7" ^GBDG "A7" AECA | "Dmaj7" DFAF "A7" A2E2 | % measure 4-8
 %%MIDI gchord b2b2
-| "Dmaj7" D/2F/2A/2F/2 "A7" A/2C/2E/2A/2 | "Gmaj7" G/2B/2d/2B/2 "F#m7" A/2F/2C/2E/2 | "Em7" E/2G/2B/2E/2 "Bm7" D/2F/2A/2D/2 | "E7" ^G/2B/2D/2G/2 "A7" A/2E/2C/2A/2 | % measure 1-4
-| "Dmaj7" D/2F/2A/2F/2 "Gmaj7" G/2B/2d/2B/2 | "F#m7" A/2F/2C/2E/2 "Bm7" D/2F/2A/2D/2 | "E7" ^G/2B/2D/2G/2 "A7" A/2E/2C/2A/2 | "Dmaj7" D/2F/2A/2F/2 "A7" AE | % measure 4-8
-| "Dmaj7" DF "Gmaj7" GB | "F#m7" A/2F/2C/2E/2 "Em7" G/2B/2D/2G/2 | "A7" A/2E/2C/2A/2 "Dmaj7" DF | "Gmaj7" GB "A7" AE | % measure 9-12
-| "Dmaj7" D2 "Gmaj7" G2 | "F#m7" A/2F/2C/2E/2 "Bm7" D/2F/2A/2D/2 | "E7" ^G/2B/2D/2G/2 "A7" A/2E/2C/2A/2 | "Dmaj7" DF "A7" AE |"Dmaj7" D C D2 | % measure 13-16
+| "Dmaj7" D2F2 "Gmaj7" G2B2 | "F#m7" AFCE "Em7" GBDG | "A7" AECA "Dmaj7" D2F2 | "Gmaj7" G2B2 "A7" A2E2 | % measure 9-12
+%%MIDI gchord b2b2
+| "Dmaj7" D4 "Gmaj7" G4 | "F#m7" AFCE "Bm7" DFAD | "E7" ^GBDG "A7" AECA | "Dmaj7" D2F2 "A7" A2E2 |"Dmaj7" D2 C2 D4 | % measure 13-16
 ```
